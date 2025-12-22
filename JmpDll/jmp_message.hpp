@@ -18,13 +18,13 @@ class JmpMessage
 protected:
 	json json_obj;
 
-public:
 	JmpMessage(std::string message) {
 		json_obj["Message"] = message;
 	}
 
+public:
 	JmpMessage() {
-		json_obj["Message"] = "";
+		json_obj["ACK"] = "";
 	}
 
 	std::string dump() {
