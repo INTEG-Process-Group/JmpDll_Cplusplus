@@ -1,7 +1,8 @@
 .svn
 .vs
-Debug
-Documentation
+Debug/
+Documentation/
 obj/
 *.tlog
+*.vcxproj*
 *~lock*
