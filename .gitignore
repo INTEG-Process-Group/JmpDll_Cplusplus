@@ -6,3 +6,6 @@ obj/
 *.tlog
 *.vcxproj*
 *~lock*
+C++Test/jmpdll.log
+C++Test/jmpdll.log
+JmpDll/temps.dat
