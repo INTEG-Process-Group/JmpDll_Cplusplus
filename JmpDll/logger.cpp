@@ -96,9 +96,6 @@ void Logger::log(std::string message)
 #else
 	std::snprintf(timestamp, sizeof(timestamp), "%s.%03d", buf, static_cast<int>(ms.count()));
 #endif
-	std::puts(timestamp);
-
-
 
 	// Create log entry
 	std::ostringstream logEntry;

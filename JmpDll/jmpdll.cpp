@@ -132,13 +132,13 @@ JMPDLL_API int GetDllVersion(char* versionString) {
 
 
 
-ConnectionCallbackFunction ConnectionCallback = nullptr;
-ConnectionCallbackFunction AuthenticationCallback = nullptr;
-ConnectionCallbackFunction MonitorCallback = nullptr;
+CallbackFunction ConnectionCallback = nullptr;
+CallbackFunction AuthenticationCallback = nullptr;
+CallbackFunction MonitorCallback = nullptr;
 
 
 
-JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback) {
+JMPDLL_API int SetConnectionCallback(CallbackFunction callback) {
 	ConnectionCallback = callback;
 
 	// if this was called after some JMP connections were made then we should go though the 
@@ -148,14 +148,14 @@ JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback) {
 
 
 
-JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback) {
+JMPDLL_API int SetAuthenticationCallback(CallbackFunction callback) {
 	AuthenticationCallback = callback;
 	return OK;
 }
 
 
 
-JMPDLL_API int SetMonitorCallback(ConnectionCallbackFunction callback) {
+JMPDLL_API int SetMonitorCallback(CallbackFunction callback) {
 	MonitorCallback = callback;
 	return OK;
 }

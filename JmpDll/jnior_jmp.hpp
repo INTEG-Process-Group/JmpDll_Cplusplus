@@ -9,16 +9,16 @@ using json = nlohmann::json;
 #include "logger.hpp"
 
 
-typedef int(*ConnectionCallbackFunction)(char* sessionId);
+typedef int(*CallbackFunction)(char* sessionId);
 
 
 class JniorJmp
 {
 
 private:
-	ConnectionCallbackFunction ConnectionCallback;
-	ConnectionCallbackFunction AuthenticationCallback;
-	ConnectionCallbackFunction MonitorCallback;
+	CallbackFunction ConnectionCallback;
+	CallbackFunction AuthenticationCallback;
+	CallbackFunction MonitorCallback;
 
 	char* m_uuid = new char[8];
 	char* m_ipAddress;
@@ -53,9 +53,9 @@ public:
 	JniorJmp(const char* ipAddress, int port = 9220);
 	~JniorJmp();
 
-	int SetConnectionCallback(ConnectionCallbackFunction callback);
-	int SetAuthenticationCallback(ConnectionCallbackFunction callback);
-	int SetMonitorCallback(ConnectionCallbackFunction callback);
+	int SetConnectionCallback(CallbackFunction callback);
+	int SetAuthenticationCallback(CallbackFunction callback);
+	int SetMonitorCallback(CallbackFunction callback);
 
 	char* getUUID();
 
@@ -64,8 +64,11 @@ public:
 	int Send(const char* jsonMessage);
 	void MessageReceived(json json_obj);
 
+	/**
+	 * @brief		Sends the given credentials with the nonce that was received from the 
+	 *				authentication fialed message.
+	 */
 	int SendLogin(std::string username, std::string password);
-	void SendLogin(std::string username, std::string password, std::string nonce);
 	bool IsLoggedIn();
 
 	int GetInputs();
@@ -90,5 +93,13 @@ public:
 	 */
 	json ReadDevice(std::string deviceId);
 	int WriteDevice(std::string deviceId, std::string hexOutput);
+
+	CallbackFunction getConnectionCallback() {
+		return this->ConnectionCallback;
+	}
+
+private:
+	void SendLogin(std::string username, std::string password, std::string nonce);
+
 };
 

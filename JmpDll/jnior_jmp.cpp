@@ -40,14 +40,14 @@ JniorJmp::~JniorJmp() {
 
 
 
-int JniorJmp::SetConnectionCallback(ConnectionCallbackFunction callback) {
+int JniorJmp::SetConnectionCallback(CallbackFunction callback) {
 	this->ConnectionCallback = callback;
 	return 0;
 }
 
 
 
-int JniorJmp::SetAuthenticationCallback(ConnectionCallbackFunction callback) {
+int JniorJmp::SetAuthenticationCallback(CallbackFunction callback) {
 	this->AuthenticationCallback = callback;
 	return 0;
 }
@@ -55,6 +55,7 @@ int JniorJmp::SetAuthenticationCallback(ConnectionCallbackFunction callback) {
 
 
 int JniorJmp::SetMonitorCallback(ConnectionCallbackFunction callback) {
+int JniorJmp::SetMonitorCallback(CallbackFunction callback) {
 	this->MonitorCallback = callback;
 	return 0;
 }
@@ -98,15 +99,17 @@ int JniorJmp::Connect()
 			0,											// use default creation flags 
 			&m_dwThreadId);								// returns the thread identifier 
 
-		if (nullptr != this->ConnectionCallback) {
-			this->ConnectionCallback(this->m_uuid);
-		}
-
 		_loginFailureCount = 0;
 
 		// we were successfully connected.  send an empty message so that we get an 
 		//  unauthenticated response with a Nonce to use in our login message
 		this->Send(JmpMessage("").dump().c_str());
+	}
+
+	// if we have a connection callback then call it.  we do this whether the connection was 
+	//  successful or not
+	if (nullptr != this->ConnectionCallback) {
+		this->ConnectionCallback(this->m_uuid);
 	}
 
 	// we cant return until the connection has been negotiated
@@ -141,6 +144,10 @@ void JniorJmp::MessageReceived(json json_obj) {
 			this->SendLogin("jnior", "jnior2", this->_nonce);
 		}
 		else {
+
+			// if we have an authentication callback then call it.  we only do this if this is not 
+			//  the first failure.  when the authentication fails the first time we will 
+			//  automatically respond with the default credentials.
 			if (nullptr != this->AuthenticationCallback) {
 				this->AuthenticationCallback(this->m_uuid);
 			}
@@ -153,6 +160,8 @@ void JniorJmp::MessageReceived(json json_obj) {
 
 		_loggedIn = true;
 
+		// if we have an authentication callback then call it.  the user will have to call 
+		//  IsLoggedIn() to find out that the login was successful here
 		if (nullptr != this->AuthenticationCallback) {
 			this->AuthenticationCallback(this->m_uuid);
 		}
@@ -167,14 +176,16 @@ void JniorJmp::MessageReceived(json json_obj) {
 		this->inputsJson = json_obj["Inputs"];
 		this->outputsJson = json_obj["Outputs"];
 
+		// if we have an monitor callback then call it.  the user will have to call the 
+		//  appropriate IO methods to get the status of the IO.
 		if (nullptr != this->MonitorCallback) {
 			this->MonitorCallback(this->m_uuid);
 		}
 
 	}
 
-	// check to see if a hash was found.  if it was then alert our conditional 
-	//  lock that is waiting on the response
+	// check to see if a hash was found.  if it was then alert our conditional lock that is 
+	//  waiting on the response
 	if (!hash.empty()) {
 		this->dataReady = true;
 		this->responseJson = json_obj;
@@ -457,6 +468,12 @@ static DWORD WINAPI receiverThread(LPVOID *lparam)
 	}
 	catch (const std::runtime_error& e) {
 		jniorJmp->logfile->error("error: " + std::string(e.what()));
+	}
+
+	// if we have a connection callback then call it.  we do this whether the connection was 
+	//  successful or not
+	if (nullptr != jniorJmp->getConnectionCallback()) {
+		jniorJmp->getConnectionCallback()(jniorJmp->getUUID());
 	}
 
 	jniorJmp->logfile->log("listener done.");

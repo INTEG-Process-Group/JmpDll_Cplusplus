@@ -91,11 +91,34 @@ extern "C" {
 	 */
 	JMPDLL_API int GetDllVersion(char* versionString);
 
-	typedef int (*ConnectionCallbackFunction)(char* sessionId);
+	typedef int (*CallbackFunction)(char* sessionId);
 	
-	JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback);
-	JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback);
-	JMPDLL_API int SetMonitorCallback(ConnectionCallbackFunction callback);
+	/**
+	 * @brief		Sets a callback that is called when a connection state changes
+	 *
+	 * We must now call IsConnected() for the session to get the actual status of the connection.
+	 *
+	 * @param		callback		A funtion that will be called when the connection status changes
+	 */
+	JMPDLL_API int SetConnectionCallback(CallbackFunction callback);
+
+	/**
+	 * @brief		Sets a callback that is called when a authentication state changes
+	 *
+	 * We must now call IsLoggedIn() for the session to get the actual status of the authentication.
+	 *
+	 * @param		callback		A funtion that will be called when the authentication status changes
+	 */
+	JMPDLL_API int SetAuthenticationCallback(CallbackFunction callback);
+
+	/**
+	 * @brief		Sets a callback that is called when a monitor packet is received
+	 *
+	 * We must now call methods to get the state of the IO
+	 *
+	 * @param		callback		A funtion that will be called when sa monitor packet is received
+	 */
+	JMPDLL_API int SetMonitorCallback(CallbackFunction callback);
 
 
 	/**
@@ -124,13 +147,19 @@ extern "C" {
 
 	/*****   CONNECTION STATUS   *************************************************/
 
-	/*
-	 * returns whether the connection referenced by the connectionUUID is currently connected to a JNIOR
+	/**
+	 * @brief		returns whether the connection referenced by the connectionUUID is currently 
+	 *				connected to a JNIOR
+	 *
+	 * @param  ipAddress  of the JNIOR to get the connected status from
 	 */
 	JMPDLL_API bool IsConnected(const char* connectionUUID);
 
-	/*
-	 * returns whether the connection referenced by the connectionUUID is currently logged in to a JNIOR
+	/**
+	 * @brief		returns whether the connection referenced by the connectionUUID is currently 
+	 *				logged in to a JNIOR
+	 *
+	 * @param  ipAddress  of the JNIOR to get the logged in status from
 	 */
 	JMPDLL_API bool IsLoggedIn(const char* connectionUUID);
 
@@ -138,13 +167,13 @@ extern "C" {
 	/*****   INTERNAL IO   *******************************************************/
 
 	/*
-	 * gets the state of an INPUT identified by the channel number
+	 * @brief		gets the state of an INPUT identified by the channel number
 	 */
 	JMPDLL_API int GetInput(const char* connectionUUID, int channelNumber);
 
 	/**
-	 * @brief	gets the state of an Output identified by the channel number.  the channel numbers
-	 *			indexed starting with 1.
+	 * @brief		gets the state of an Output identified by the channel number.  the channel 
+	 *				numbers indexed starting with 1.
 	 *
 	 * @param	connectionUUID	a string representing a connection
 	 * @param	channelNumber	the channel we wish to get the state of
@@ -153,9 +182,15 @@ extern "C" {
 	 */
 	JMPDLL_API int GetOutput(const char* connectionUUID, int channelNumber);
 
-	/*
-	 * controls a given output according to the provided command.  Possible commands are "Open",
-	 *  "Close", "Toggle", "Open Pulse", and "Close Pulse".  The pulse commands must also give a duration.
+	/**
+	 * @brief		controls a given output according to the provided command.  Possible commands 
+	 *				are "Open", "Close", "Toggle", "Open Pulse", and "Close Pulse".  The pulse 
+	 *				commands must also give a duration.
+	 *
+	 * @param	connectionUUID	a string representing a connection
+	 * @param	channelNumber	the channel we wish to get the state of
+	 *
+	 * @return  0 - LOW, 1 - HIGH
 	 */
 	JMPDLL_API int ControlOutput(const char* connectionUUID, const char* command, int channelNumber, int duration);
 
@@ -194,16 +229,22 @@ extern "C" {
 
 	/*****   EXTERNAL DEVICES   **************************************************/
 
+	/**
+	 * @brief		Used to get a list of device IDs for the connected external modules
+	 *
+	 * @param		connectionUUID		A string representing a JMP connection
+	 * @param		connectedDevices	The array of module ids that will get filled in
+	 */
 	JMPDLL_API int EnumerateDevices(const char* connectionUUID, char** connectedDevices);
 
-	/*
-	 * Gets the temperature in Celsius from the module with the given deviceId.  the temperature is
-	 *  assigned to the tempC argument that was passed in by reference
+	/**
+	 * @ brief		Gets the temperature in Celsius from the module with the given deviceId.  the 
+	 *				temperature is assigned to the tempC argument that was passed in by reference
 	 */
 	JMPDLL_API int GetTemperature(const char* connectionUUID, const char* deviceId, TEMPERATURE* temp_struct);
 	JMPDLL_API int GetTemperatureByChannel(const char* connectionUUID, int channel, TEMPERATURE* temp_struct);
 
-	/*
+	/**
 	 * Gets the enironmental properties from the module with the given device id.  the properties are
 	 *  assigned to the structure that is passed in by reference.
 	 */
@@ -214,11 +255,12 @@ extern "C" {
 	JMPDLL_API int SetTenVolt(const char* connectionUUID, const std::string deviceId, const TEN_VOLT* ten_volt_struct);
 
 	/**
-	 * This function sets a channel of a ten volt module to a given percentage.  The module is
-	 *  determined by deviding the given channel number by the number of outputs per module.
-	 *  Since a TenVolt module has 2 outputs, channel 5 would be the first output on the third
-	 *  module.  The correct module is automatically determined within the code.
-	*/
+	 * @brief		This function sets a channel of a ten volt module to a given percentage.  The 
+	 *				module is determined by deviding the given channel number by the number of 
+	 *				outputs per module.  Since a TenVolt module has 2 outputs, channel 5 would be 
+	 *				the first output on the third module.  The correct module is automatically 
+	 *				determined within the code.
+	 */
 	JMPDLL_API int SetTenVoltChannelPercentage(const char* connectionUUID, int channel, double percentage);
 }
 
