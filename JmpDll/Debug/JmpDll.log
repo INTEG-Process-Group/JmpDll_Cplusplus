@@ -1,20 +1,33 @@
 ﻿  jmpdll.cpp
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(46): warning C4091: '__declspec(dllexport)': ignored on left of 'REGISTRY_KEY' when no variable is declared
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(47): warning C4161: #pragma pack(pop...): more pops than pushes
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(56): warning C4091: '__declspec(dllexport)': ignored on left of 'TEMPERATURE' when no variable is declared
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(57): warning C4161: #pragma pack(pop...): more pops than pushes
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(68): warning C4091: '__declspec(dllexport)': ignored on left of 'ENVIRON' when no variable is declared
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(69): warning C4161: #pragma pack(pop...): more pops than pushes
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(78): warning C4091: '__declspec(dllexport)': ignored on left of 'TEN_VOLT' when no variable is declared
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.h(79): warning C4161: #pragma pack(pop...): more pops than pushes
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.cpp(116): warning C4101: 'oor': unreferenced local variable
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.cpp(119): warning C4101: 'ia': unreferenced local variable
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.cpp(271): warning C4018: '<': signed/unsigned mismatch
-c:\users\kevin cloutier\documents\sandbox\windows applications\jmpdll\jmpdll\jmpdll.cpp(503): warning C4244: '=': conversion from 'double' to 'unsigned short', possible loss of data
-  JmpDll.vcxproj -> C:\Users\Kevin Cloutier\Documents\Sandbox\Windows Applications\JmpDll\Debug\JmpDll.dll
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(46): warning C4091: '__declspec(dllexport)': ignored on left of 'REGISTRY_KEY' when no variable is declared
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(47): warning C4161: #pragma pack(pop...): more pops than pushes
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(56): warning C4091: '__declspec(dllexport)': ignored on left of 'TEMPERATURE' when no variable is declared
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(57): warning C4161: #pragma pack(pop...): more pops than pushes
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(68): warning C4091: '__declspec(dllexport)': ignored on left of 'ENVIRON' when no variable is declared
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(69): warning C4161: #pragma pack(pop...): more pops than pushes
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(78): warning C4091: '__declspec(dllexport)': ignored on left of 'TEN_VOLT' when no variable is declared
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(79): warning C4161: #pragma pack(pop...): more pops than pushes
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(116): warning C4101: 'oor': unreferenced local variable
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(119): warning C4101: 'ia': unreferenced local variable
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(563): warning C4244: '=': conversion from 'double' to 'unsigned short', possible loss of data
+  jnior_jmp.cpp
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(107): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(113): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(118): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(126): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(143): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jnior_jmp.cpp(225): warning C4018: '<': signed/unsigned mismatch
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jnior_jmp.cpp(236): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+     Creating library C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.lib and object C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.exp
+  JmpDll.vcxproj -> C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.dll
+  ..\Debug\C++Test.exp
+  ..\Debug\C++Test.lib
+  ..\Debug\C++Test.pdb
   ..\Debug\JmpDll.dll
   ..\Debug\JmpDll.exp
   ..\Debug\JmpDll.ilk
   ..\Debug\JmpDll.lib
   ..\Debug\JmpDll.pdb
-          5 file(s) copied.
+          8 file(s) copied.

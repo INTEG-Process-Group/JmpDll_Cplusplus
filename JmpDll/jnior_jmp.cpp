@@ -40,6 +40,27 @@ JniorJmp::~JniorJmp() {
 
 
 
+int JniorJmp::SetConnectionCallback(ConnectionCallbackFunction callback) {
+	this->ConnectionCallback = callback;
+	return 0;
+}
+
+
+
+int JniorJmp::SetAuthenticationFailedCallback(ConnectionCallbackFunction callback) {
+	this->AuthenticationFailedCallback = callback;
+	return 0;
+}
+
+
+
+int JniorJmp::SetAuthenticatedCallback(ConnectionCallbackFunction callback) {
+	this->AuthenticatedCallback = callback;
+	return 0;
+}
+
+
+
 SOCKET JniorJmp::getSocket() {
 	return this->m_sckt;
 }
@@ -77,6 +98,12 @@ int JniorJmp::Connect()
 			0,											// use default creation flags 
 			&m_dwThreadId);								// returns the thread identifier 
 
+		if (nullptr != this->ConnectionCallback) {
+			this->ConnectionCallback(this->m_uuid);
+		}
+
+		_loginFailureCount = 0;
+
 		// we were successfully connected.  send an empty message so that we get an 
 		//  unauthenticated response with a Nonce to use in our login message
 		this->Send(JmpMessage("").dump().c_str());
@@ -108,13 +135,25 @@ void JniorJmp::MessageReceived(json json_obj) {
 	}
 
 	if (message == "Error") {
-		std::string nonce = json_obj["Nonce"];
-		this->SendLogin("jnior", "jnior", nonce);
+
+		this->_nonce = json_obj["Nonce"];
+		if (0 == this->_loginFailureCount++) {
+			this->SendLogin("jnior", "jnior2", this->_nonce);
+		}
+		else {
+			if (nullptr != this->AuthenticationFailedCallback) {
+				this->AuthenticationFailedCallback(this->m_uuid);
+			}
+		}
 
 	}
 	else if ("Authenticated" == message) {
 		this->dataReady = true;
 		this->responseJson = json_obj;
+
+		if (nullptr != this->AuthenticatedCallback) {
+			this->AuthenticatedCallback(this->m_uuid);
+		}
 
 		std::unique_lock<std::mutex> lock(mtx);
 		lock.unlock();
@@ -139,6 +178,13 @@ void JniorJmp::MessageReceived(json json_obj) {
 		cv.notify_one();
 	}
 
+}
+
+
+
+int JniorJmp::SendLogin(std::string username, std::string password) {
+	this->SendLogin(username, password, this->_nonce);
+	return 0;
 }
 
 

@@ -13,25 +13,25 @@
 
 extern "C" {
 	/***** RETURN CODES **********************************************************/
-	extern "C" JMPDLL_API int OK = 0;
-	extern "C" JMPDLL_API int INVALID_IP_ADDRESS = -101;
-	extern "C" JMPDLL_API int INVALID_UUID = -102;
-	extern "C" JMPDLL_API int INVALID_DEVICE_ID = -103;
-	extern "C" JMPDLL_API int WRONG_DEVICE_TYPE = -104;
-	extern "C" JMPDLL_API int INVALID_ARGUMENT = -105;
-	extern "C" JMPDLL_API int CHANNEL_OUT_OF_RANGE = -106;
-	extern "C" JMPDLL_API int MODULE_DOES_NOT_EXIST = -107;
+	JMPDLL_API int OK = 0;
+	JMPDLL_API int INVALID_IP_ADDRESS = -101;
+	JMPDLL_API int INVALID_UUID = -102;
+	JMPDLL_API int INVALID_DEVICE_ID = -103;
+	JMPDLL_API int WRONG_DEVICE_TYPE = -104;
+	JMPDLL_API int INVALID_ARGUMENT = -105;
+	JMPDLL_API int CHANNEL_OUT_OF_RANGE = -106;
+	JMPDLL_API int MODULE_DOES_NOT_EXIST = -107;
 
 
 	/***** ENTERNAL DEVICE TYPES *************************************************/
-	extern "C" JMPDLL_API int FOUR_TWENTY_MODULE_ID = 0xfe;
-	extern "C" JMPDLL_API int TEN_VOLT_MODULE_ID = 0xfd;
-	//extern "C" JMPDLL_API int RTD_MODULE_ID = 0xfc;
-	extern "C" JMPDLL_API int FOUR_ROUT_MODULE_ID = 0xfb;
-	extern "C" JMPDLL_API int CONTROL_PANEL_MODULE_ID = 0xfa;
-	extern "C" JMPDLL_API int THREE_CHANNEL_DIMMER_MODULE_ID = 0xf9;
-	extern "C" JMPDLL_API int OCTAL_INPUT_MODULE_ID = 0xf8;
-	extern "C" JMPDLL_API int ENVIRON_SENSOR_ID = 0x7e;
+	JMPDLL_API int FOUR_TWENTY_MODULE_ID = 0xfe;
+	JMPDLL_API int TEN_VOLT_MODULE_ID = 0xfd;
+	//JMPDLL_API int RTD_MODULE_ID = 0xfc;
+	JMPDLL_API int FOUR_ROUT_MODULE_ID = 0xfb;
+	JMPDLL_API int CONTROL_PANEL_MODULE_ID = 0xfa;
+	JMPDLL_API int THREE_CHANNEL_DIMMER_MODULE_ID = 0xf9;
+	JMPDLL_API int OCTAL_INPUT_MODULE_ID = 0xf8;
+	JMPDLL_API int ENVIRON_SENSOR_ID = 0x7e;
 
 
 	/***** STRUCTURES ************************************************************/
@@ -40,7 +40,7 @@ extern "C" {
 	 * a structure representing a registry key along with its value
 	 */
 #pragma pack(1)
-	extern "C" JMPDLL_API struct REGISTRY_KEY {
+	JMPDLL_API struct REGISTRY_KEY {
 		const char* keyName;
 		char* value;
 	};
@@ -50,7 +50,7 @@ extern "C" {
 	 * a temperature structure
 	 */
 #pragma pack(1)
-	extern "C" JMPDLL_API struct TEMPERATURE {
+	JMPDLL_API struct TEMPERATURE {
 		double tempC;
 		double tempF;
 	};
@@ -61,7 +61,7 @@ extern "C" {
 	 *  EDS Envornmental Sensors 0x7E
 	 */
 #pragma pack(1)
-	extern "C" JMPDLL_API struct ENVIRON {
+	JMPDLL_API struct ENVIRON {
 		double tempC;
 		double tempF;
 		double humidity;
@@ -72,7 +72,7 @@ extern "C" {
 	 * INTEG Ten Volt - Type 0xFD
 	 */
 #pragma pack(1)
-	extern "C" JMPDLL_API struct TEN_VOLT {
+	JMPDLL_API struct TEN_VOLT {
 		unsigned short rawIns[4];
 		unsigned short rawOuts[2];
 	};
@@ -89,7 +89,14 @@ extern "C" {
 	 *
 	 * @return OK for success
 	 */
-	extern "C" JMPDLL_API int GetDllVersion(char* versionString);
+	JMPDLL_API int GetDllVersion(char* versionString);
+
+	typedef int (*ConnectionCallbackFunction)(char* sessionId);
+	
+	JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback);
+	JMPDLL_API int SetAuthenticationFailedCallback(ConnectionCallbackFunction callback);
+	JMPDLL_API int SetAuthenticatedCallback(ConnectionCallbackFunction callback);
+
 
 	/**
 	 * @brief  Creates a connection to a JMP stream on the JNIOR with the given IP Address
@@ -105,7 +112,11 @@ extern "C" {
 	 *
 	 * @return OK if successful
 	 */
-	extern "C" JMPDLL_API int CreateConnection(const char* ipAddress, char* uuid);
+	JMPDLL_API int CreateConnection(const char* ipAddress, char* uuid);
+
+	JMPDLL_API int Connect(const char* connectionUUID);
+
+	JMPDLL_API int Login(const char* connectionUUID, const char* username, const char* password);
 
 
 
@@ -116,13 +127,12 @@ extern "C" {
 	/*
 	 * returns whether the connection referenced by the connectionUUID is currently connected to a JNIOR
 	 */
-	extern "C" JMPDLL_API bool IsConnected(const char* connectionUUID);
+	JMPDLL_API bool IsConnected(const char* connectionUUID);
 
 	/*
 	 * returns whether the connection referenced by the connectionUUID is currently logged in to a JNIOR
 	 */
-	extern "C" JMPDLL_API bool IsLoggedIn(const char* connectionUUID);
-
+	JMPDLL_API bool IsLoggedIn(const char* connectionUUID);
 
 
 	/*****   INTERNAL IO   *******************************************************/
@@ -130,7 +140,7 @@ extern "C" {
 	/*
 	 * gets the state of an INPUT identified by the channel number
 	 */
-	extern "C" JMPDLL_API int GetInput(const char* connectionUUID, int channelNumber);
+	JMPDLL_API int GetInput(const char* connectionUUID, int channelNumber);
 
 	/**
 	 * @brief	gets the state of an Output identified by the channel number.  the channel numbers
@@ -141,24 +151,24 @@ extern "C" {
 	 *
 	 * @return  0 - LOW, 1 - HIGH
 	 */
-	extern "C" JMPDLL_API int GetOutput(const char* connectionUUID, int channelNumber);
+	JMPDLL_API int GetOutput(const char* connectionUUID, int channelNumber);
 
 	/*
 	 * controls a given output according to the provided command.  Possible commands are "Open",
 	 *  "Close", "Toggle", "Open Pulse", and "Close Pulse".  The pulse commands must also give a duration.
 	 */
-	extern "C" JMPDLL_API int ControlOutput(const char* connectionUUID, const char* command, int channelNumber, int duration);
+	JMPDLL_API int ControlOutput(const char* connectionUUID, const char* command, int channelNumber, int duration);
 
 	/*
 	 * helper functions for output control.  this relieves the need for the user to supply the string,
 	 *  which can be prone to typo.  could supply an enum and then convert to a string but
 	 *  this seems to be a more straight call.
 	 */
-	extern "C" JMPDLL_API int CloseOutput(const char* connectionUUID, int channelNumber);
-	extern "C" JMPDLL_API int OpenOutput(const char* connectionUUID, int channelNumber);
-	extern "C" JMPDLL_API int ToggleOutput(const char* connectionUUID, int channelNumber);
-	extern "C" JMPDLL_API int ClosePulseOutput(const char* connectionUUID, int channelNumber, int duration);
-	extern "C" JMPDLL_API int OpenPulseOutput(const char* connectionUUID, int channelNumber, int duration);
+	JMPDLL_API int CloseOutput(const char* connectionUUID, int channelNumber);
+	JMPDLL_API int OpenOutput(const char* connectionUUID, int channelNumber);
+	JMPDLL_API int ToggleOutput(const char* connectionUUID, int channelNumber);
+	JMPDLL_API int ClosePulseOutput(const char* connectionUUID, int channelNumber, int duration);
+	JMPDLL_API int OpenPulseOutput(const char* connectionUUID, int channelNumber, int duration);
 
 
 
@@ -178,7 +188,7 @@ extern "C" {
 	 * @return		OK					if successful
 	 *				INVLAID_UUID		if the UUID does not exist
 	 */
-	extern "C" 	JMPDLL_API int ReadRegistryKeys(const char* connectionUUID, REGISTRY_KEY* registryKeys, int keyCount);
+		JMPDLL_API int ReadRegistryKeys(const char* connectionUUID, REGISTRY_KEY* registryKeys, int keyCount);
 
 
 
@@ -197,7 +207,7 @@ extern "C" {
 	 * Gets the enironmental properties from the module with the given device id.  the properties are
 	 *  assigned to the structure that is passed in by reference.
 	 */
-	extern "C" JMPDLL_API int GetEnviron(const char* connectionUUID, const char* deviceId, ENVIRON* environ_struct);
+	JMPDLL_API int GetEnviron(const char* connectionUUID, const char* deviceId, ENVIRON* environ_struct);
 
 	JMPDLL_API int GetTenVolt(const char* connectionUUID, const char* deviceId, TEN_VOLT* ten_volt_struct);
 

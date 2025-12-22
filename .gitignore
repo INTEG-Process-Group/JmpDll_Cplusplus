@@ -1,5 +1,6 @@
 .svn
 .vs
+Debug
 Documentation
 obj/
 *.tlog
