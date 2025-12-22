@@ -26,12 +26,20 @@ int authentication_callback(char* sessionId) {
 
 
 
+int monitor_callback(char* sessionId) {
+	std::cout << "monitor packet received" << std::endl;
+	return 0;
+}
+
+
+
 int main()
 {
 
 	// we should be able to assign a callback to get alerted when a connection is made
 	SetConnectionCallback(connection_made);
 	SetAuthenticationCallback(authentication_callback);
+	SetMonitorCallback(monitor_callback);
 
 	// create a connection and save the sessionid
 	char sessionId[32];

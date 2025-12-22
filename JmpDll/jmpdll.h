@@ -95,6 +95,7 @@ extern "C" {
 	
 	JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback);
 	JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback);
+	JMPDLL_API int SetMonitorCallback(ConnectionCallbackFunction callback);
 
 
 	/**

@@ -9,12 +9,20 @@ c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdl
 c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.h(79): warning C4161: #pragma pack(pop...): more pops than pushes
 c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(116): warning C4101: 'oor': unreferenced local variable
 c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(119): warning C4101: 'ia': unreferenced local variable
-c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(328): warning C4018: '<': signed/unsigned mismatch
-c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(565): warning C4244: '=': conversion from 'double' to 'unsigned short', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(337): warning C4018: '<': signed/unsigned mismatch
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jmpdll.cpp(574): warning C4244: '=': conversion from 'double' to 'unsigned short', possible loss of data
+  jnior_jmp.cpp
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(107): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(113): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(118): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(126): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\md5.h(143): warning C4244: 'argument': conversion from 'uint64_t' to 'const unsigned int', possible loss of data
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jnior_jmp.cpp(237): warning C4018: '<': signed/unsigned mismatch
+c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdll\jnior_jmp.cpp(248): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+     Creating library C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.lib and object C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.exp
   JmpDll.vcxproj -> C:\Users\Kevin Cloutier\Documents\Sandbox\GitHub Projects\JmpDll_Cplusplus\Debug\JmpDll.dll
-  ..\Debug\C++Test.exe
   ..\Debug\C++Test.exp
-  ..\Debug\C++Test.ilk
   ..\Debug\C++Test.lib
   ..\Debug\C++Test.pdb
   ..\Debug\JmpDll.dll
@@ -22,4 +30,4 @@ c:\users\kevin cloutier\documents\sandbox\github projects\jmpdll_cplusplus\jmpdl
   ..\Debug\JmpDll.ilk
   ..\Debug\JmpDll.lib
   ..\Debug\JmpDll.pdb
-         10 file(s) copied.
+          8 file(s) copied.

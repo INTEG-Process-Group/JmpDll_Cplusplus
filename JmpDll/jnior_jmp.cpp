@@ -54,6 +54,13 @@ int JniorJmp::SetAuthenticationCallback(ConnectionCallbackFunction callback) {
 
 
 
+int JniorJmp::SetMonitorCallback(ConnectionCallbackFunction callback) {
+	this->MonitorCallback = callback;
+	return 0;
+}
+
+
+
 SOCKET JniorJmp::getSocket() {
 	return this->m_sckt;
 }
@@ -159,6 +166,10 @@ void JniorJmp::MessageReceived(json json_obj) {
 		this->ioTimestamp = json_obj["Timestamp"];
 		this->inputsJson = json_obj["Inputs"];
 		this->outputsJson = json_obj["Outputs"];
+
+		if (nullptr != this->MonitorCallback) {
+			this->MonitorCallback(this->m_uuid);
+		}
 
 	}
 

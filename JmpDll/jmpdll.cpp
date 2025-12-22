@@ -134,6 +134,7 @@ JMPDLL_API int GetDllVersion(char* versionString) {
 
 ConnectionCallbackFunction ConnectionCallback = nullptr;
 ConnectionCallbackFunction AuthenticationCallback = nullptr;
+ConnectionCallbackFunction MonitorCallback = nullptr;
 
 
 
@@ -149,6 +150,13 @@ JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback) {
 
 JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback) {
 	AuthenticationCallback = callback;
+	return OK;
+}
+
+
+
+JMPDLL_API int SetMonitorCallback(ConnectionCallbackFunction callback) {
+	MonitorCallback = callback;
 	return OK;
 }
 
@@ -170,6 +178,7 @@ JMPDLL_API int CreateConnection(const char* ipAddress, char* connectionUUID) {
 
 	if (nullptr != ConnectionCallback) jniorJmp->SetConnectionCallback(ConnectionCallback);
 	if (nullptr != AuthenticationCallback) jniorJmp->SetAuthenticationCallback(AuthenticationCallback);
+	if (nullptr != MonitorCallback) jniorJmp->SetMonitorCallback(MonitorCallback);
 
 	// add the connection to our table
 	jnior_connections[connectionUUID] = jniorJmp;

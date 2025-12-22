@@ -12,3 +12,5 @@ JmpDll/temps.dat
 *.hint
 *.idb
 *.pdb
+JmpDll/Debug/vc141.idb
+JmpDll/Debug/vc141.pdb

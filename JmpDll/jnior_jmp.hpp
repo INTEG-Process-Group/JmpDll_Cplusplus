@@ -18,6 +18,7 @@ class JniorJmp
 private:
 	ConnectionCallbackFunction ConnectionCallback;
 	ConnectionCallbackFunction AuthenticationCallback;
+	ConnectionCallbackFunction MonitorCallback;
 
 	char* m_uuid = new char[8];
 	char* m_ipAddress;
@@ -54,6 +55,7 @@ public:
 
 	int SetConnectionCallback(ConnectionCallbackFunction callback);
 	int SetAuthenticationCallback(ConnectionCallbackFunction callback);
+	int SetMonitorCallback(ConnectionCallbackFunction callback);
 
 	char* getUUID();
 
