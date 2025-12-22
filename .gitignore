@@ -1,0 +1,6 @@
+.svn
+.vs
+Documentation
+obj/
+*.tlog
+*~lock*
