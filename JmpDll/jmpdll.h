@@ -124,16 +124,17 @@ extern "C" {
 
 
 	/**
-	 * @brief  Creates a connection to a JMP stream on the JNIOR with the given IP Address
+	 * @brief	Creates a connection to a JMP stream on the JNIOR with the given IP Address
 	 *
-	 *   creates a connection to the given IP Address.  Returns a unique UUID for the connection.
-	 *    Every call to this method will make a new connection to the ip address and return a new
-	 *    UUID.  This method waits for the new connection to be negotiated.  This code will send
-	 *    the EMPTY MESSAGE to prompt the JNIOR to send the Authentication Error.
+	 * creates a connection to the given IP Address.  Returns a unique UUID for the connection.  
+	 *  Every call to this method will make a new connection to the ip address and return a new 
+	 *  UUID.  This method waits for the new connection to be negotiated.  This code will send the 
+	 *  EMPTY MESSAGE to prompt the JNIOR to send the Authentication Error.
 	 *
-	 * @param  ipAddress  of the JNIOR to connect to
-	 * @param  connectionUUID  a pointer to a string that will accept the connection UUID of the
-	 *         established connection.  This value is only created if the connection was successful.
+	 * @param  ipAddress		of the JNIOR to connect to
+	 * @param  connectionUUID	a pointer to a string that will accept the connection UUID of the
+	 *							established connection.  This value is only created if the 
+	 *							connection was successful.
 	 *
 	 * @return OK if successful
 	 */
@@ -153,6 +154,9 @@ extern "C" {
 	 * @brief		returns whether the connection referenced by the connectionUUID is currently 
 	 *				connected to a JNIOR
 	 *
+	 *				TODO: This should not be a bool but rather an enumeration.  We could have
+	 *				connected, not connected, connection lost
+	 *
 	 * @param  ipAddress  of the JNIOR to get the connected status from
 	 */
 	JMPDLL_API bool IsConnected(const char* connectionUUID);
@@ -160,6 +164,9 @@ extern "C" {
 	/**
 	 * @brief		returns whether the connection referenced by the connectionUUID is currently 
 	 *				logged in to a JNIOR
+	 *
+	 *				TODO: This should not be a bool but rather an enumeration.  We could have 
+	 *				lot logged in, login failed, administrator, user, guest
 	 *
 	 * @param  ipAddress  of the JNIOR to get the logged in status from
 	 */

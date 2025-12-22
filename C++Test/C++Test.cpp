@@ -4,7 +4,13 @@
 
 
 int connection_callback(char* sessionId) {
-	Log("connection to " + std::string(sessionId) + " was made");
+
+	if (IsLoggedIn(sessionId)) {
+		Log("connection to " + std::string(sessionId) + " was made");
+	}
+	else {
+		Log("connection to " + std::string(sessionId) + " was NOT made or has been lost");
+	}
 	return 0;
 }
 
@@ -14,7 +20,7 @@ int authentication_callback(char* sessionId) {
 	bool is_logged_in = IsLoggedIn(sessionId);
 
 	if (is_logged_in) {
-		Log("connection to " + std::string(sessionId) + " has been authenticated");
+		Log("authentication SUCCESS for " + std::string(sessionId));
 	}
 	else {
 		Log("authentication failed for " + std::string(sessionId));
