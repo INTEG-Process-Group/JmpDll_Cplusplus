@@ -9,3 +9,6 @@ obj/
 C++Test/jmpdll.log
 C++Test/jmpdll.log
 JmpDll/temps.dat
+*.hint
+*.idb
+*.pdb

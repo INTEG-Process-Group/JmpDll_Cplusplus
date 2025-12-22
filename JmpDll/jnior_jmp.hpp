@@ -17,8 +17,7 @@ class JniorJmp
 
 private:
 	ConnectionCallbackFunction ConnectionCallback;
-	ConnectionCallbackFunction AuthenticatedCallback;
-	ConnectionCallbackFunction AuthenticationFailedCallback;
+	ConnectionCallbackFunction AuthenticationCallback;
 
 	char* m_uuid = new char[8];
 	char* m_ipAddress;
@@ -31,6 +30,7 @@ private:
 
 	std::string _nonce;
 
+	bool _loggedIn = false;
 	int _loginFailureCount = 0;
 
 public:
@@ -53,8 +53,7 @@ public:
 	~JniorJmp();
 
 	int SetConnectionCallback(ConnectionCallbackFunction callback);
-	int SetAuthenticationFailedCallback(ConnectionCallbackFunction callback);
-	int SetAuthenticatedCallback(ConnectionCallbackFunction callback);
+	int SetAuthenticationCallback(ConnectionCallbackFunction callback);
 
 	char* getUUID();
 
@@ -65,6 +64,7 @@ public:
 
 	int SendLogin(std::string username, std::string password);
 	void SendLogin(std::string username, std::string password, std::string nonce);
+	bool IsLoggedIn();
 
 	int GetInputs();
 	int GetInput(int channelNumber);

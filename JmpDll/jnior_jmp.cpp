@@ -47,15 +47,8 @@ int JniorJmp::SetConnectionCallback(ConnectionCallbackFunction callback) {
 
 
 
-int JniorJmp::SetAuthenticationFailedCallback(ConnectionCallbackFunction callback) {
-	this->AuthenticationFailedCallback = callback;
-	return 0;
-}
-
-
-
-int JniorJmp::SetAuthenticatedCallback(ConnectionCallbackFunction callback) {
-	this->AuthenticatedCallback = callback;
+int JniorJmp::SetAuthenticationCallback(ConnectionCallbackFunction callback) {
+	this->AuthenticationCallback = callback;
 	return 0;
 }
 
@@ -141,8 +134,8 @@ void JniorJmp::MessageReceived(json json_obj) {
 			this->SendLogin("jnior", "jnior2", this->_nonce);
 		}
 		else {
-			if (nullptr != this->AuthenticationFailedCallback) {
-				this->AuthenticationFailedCallback(this->m_uuid);
+			if (nullptr != this->AuthenticationCallback) {
+				this->AuthenticationCallback(this->m_uuid);
 			}
 		}
 
@@ -151,8 +144,10 @@ void JniorJmp::MessageReceived(json json_obj) {
 		this->dataReady = true;
 		this->responseJson = json_obj;
 
-		if (nullptr != this->AuthenticatedCallback) {
-			this->AuthenticatedCallback(this->m_uuid);
+		_loggedIn = true;
+
+		if (nullptr != this->AuthenticationCallback) {
+			this->AuthenticationCallback(this->m_uuid);
 		}
 
 		std::unique_lock<std::mutex> lock(mtx);
@@ -204,6 +199,12 @@ void JniorJmp::SendLogin(std::string username, std::string password, std::string
 
 	delete loginMessage;
 	delete md5;
+}
+
+
+
+bool JniorJmp::IsLoggedIn() {
+	return this->_loggedIn;
 }
 
 

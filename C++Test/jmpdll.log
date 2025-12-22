@@ -481,3 +481,38 @@
 [Mon, 22 Dec 2025 13:54:13.232] 10.0.0.62 <<< {"Message":""}
 [Mon, 22 Dec 2025 13:56:13.245] 10.0.0.62 <<< {"Message":""}
 [Mon, 22 Dec 2025 13:58:13.248] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:00:13.252] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:02:13.268] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:04:13.270] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:06:13.277] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:08:47.235] --------------------
+[Mon, 22 Dec 2025 14:08:47.236] Process Attach
+[Mon, 22 Dec 2025 14:08:47.236] Start up Winsock
+[Mon, 22 Dec 2025 14:08:47.292] get connection for ip address: 10.0.0.62
+[Mon, 22 Dec 2025 14:08:47.292] --------------------
+[Mon, 22 Dec 2025 14:08:47.302] assign connection uuid: 8f7bf975
+[Mon, 22 Dec 2025 14:08:47.309] listener started
+[Mon, 22 Dec 2025 14:08:47.310] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:08:47.434] 10.0.0.62 >>> {"Message":"Error","Nonce":"19bbe8abf2f56ad700c3313eab28","Text":"401 Unauthorized"}
+[Mon, 22 Dec 2025 14:08:47.435] 10.0.0.62 <<< {"Auth-Digest": "jnior:37792e952a741b09746d4d89d4667b7e"}
+[Mon, 22 Dec 2025 14:08:47.504] 10.0.0.62 >>> {"Message":"Error","Nonce":"bfb6ee34d5621bfbe3c7d466b7ba","Text":"401 Unauthorized"}
+[Mon, 22 Dec 2025 14:08:47.505] 10.0.0.62 <<< {"Auth-Digest": "jnior:f412afe0365fb0db5082229c2da78004"}
+[Mon, 22 Dec 2025 14:08:47.586] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766430529045,"Version":"v2.5.2"}
+[Mon, 22 Dec 2025 14:08:47.590] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Mon, 22 Dec 2025 14:08:47.591] connection negotiated
+[Mon, 22 Dec 2025 14:11:03.863] --------------------
+[Mon, 22 Dec 2025 14:11:03.865] Process Attach
+[Mon, 22 Dec 2025 14:11:03.866] Start up Winsock
+[Mon, 22 Dec 2025 14:11:03.974] get connection for ip address: 10.0.0.62
+[Mon, 22 Dec 2025 14:11:03.975] --------------------
+[Mon, 22 Dec 2025 14:11:03.986] assign connection uuid: 783dfae6
+[Mon, 22 Dec 2025 14:11:03.992] listener started
+[Mon, 22 Dec 2025 14:11:03.992] 10.0.0.62 <<< {"Message":""}
+[Mon, 22 Dec 2025 14:11:04.104] 10.0.0.62 >>> {"Message":"Error","Nonce":"d2a3a15e5d2630575657cbf46943","Text":"401 Unauthorized"}
+[Mon, 22 Dec 2025 14:11:04.106] 10.0.0.62 <<< {"Auth-Digest": "jnior:a4304eaf507c35f0c503138afc754ec6"}
+[Mon, 22 Dec 2025 14:11:04.180] 10.0.0.62 >>> {"Message":"Error","Nonce":"d8c21b7eba9eb2864b296bdb286f","Text":"401 Unauthorized"}
+[Mon, 22 Dec 2025 14:11:04.181] 10.0.0.62 <<< {"Auth-Digest": "jnior:c63b3d939ffc82a903d47046c6737e27"}
+[Mon, 22 Dec 2025 14:11:04.283] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766430665724,"Version":"v2.5.2"}
+[Mon, 22 Dec 2025 14:11:04.287] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Mon, 22 Dec 2025 14:11:04.288] connection negotiated
+[Mon, 22 Dec 2025 14:12:44.387] Process Detach

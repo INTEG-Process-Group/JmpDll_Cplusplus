@@ -10,18 +10,17 @@ int connection_made(char* sessionId) {
 
 
 
-int authentication_failed(char* sessionId) {
-	std::cout << "authentication failed for " << sessionId << std::endl;
+int authentication_callback(char* sessionId) {
+	bool is_logged_in = IsLoggedIn(sessionId);
 
-	Login(sessionId, "jnior", "jnior");
+	if (is_logged_in) {
+		std::cout << "connection to " << sessionId << " has been authenticated " << std::endl;
+	}
+	else {
+		std::cout << "authentication failed for " << sessionId << std::endl;
+		Login(sessionId, "jnior", "jnior");
+	}
 
-	return 0;
-}
-
-
-
-int authenticated(char* sessionId) {
-	std::cout << "connection to " << sessionId << " has been authenticated " << std::endl;
 	return 0;
 }
 
@@ -32,8 +31,7 @@ int main()
 
 	// we should be able to assign a callback to get alerted when a connection is made
 	SetConnectionCallback(connection_made);
-	SetAuthenticationFailedCallback(authentication_failed);
-	SetAuthenticatedCallback(authenticated);
+	SetAuthenticationCallback(authentication_callback);
 
 	// create a connection and save the sessionid
 	char sessionId[32];

@@ -133,8 +133,7 @@ JMPDLL_API int GetDllVersion(char* versionString) {
 
 
 ConnectionCallbackFunction ConnectionCallback = nullptr;
-ConnectionCallbackFunction AuthenticationFailedCallback = nullptr;
-ConnectionCallbackFunction AuthenticatedCallback = nullptr;
+ConnectionCallbackFunction AuthenticationCallback = nullptr;
 
 
 
@@ -148,15 +147,8 @@ JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback) {
 
 
 
-JMPDLL_API int SetAuthenticationFailedCallback(ConnectionCallbackFunction callback) {
-	AuthenticationFailedCallback = callback;
-	return OK;
-}
-
-
-
-JMPDLL_API int SetAuthenticatedCallback(ConnectionCallbackFunction callback) {
-	AuthenticatedCallback = callback;
+JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback) {
+	AuthenticationCallback = callback;
 	return OK;
 }
 
@@ -177,8 +169,7 @@ JMPDLL_API int CreateConnection(const char* ipAddress, char* connectionUUID) {
 	logfile.log(std::string("assign connection uuid: ") + std::string(connectionUUID));
 
 	if (nullptr != ConnectionCallback) jniorJmp->SetConnectionCallback(ConnectionCallback);
-	if (nullptr != AuthenticationFailedCallback) jniorJmp->SetAuthenticationFailedCallback(AuthenticationFailedCallback);
-	if (nullptr != AuthenticatedCallback) jniorJmp->SetAuthenticatedCallback(AuthenticatedCallback);
+	if (nullptr != AuthenticationCallback) jniorJmp->SetAuthenticationCallback(AuthenticationCallback);
 
 	// add the connection to our table
 	jnior_connections[connectionUUID] = jniorJmp;
@@ -208,6 +199,17 @@ JMPDLL_API int Login(const char* connectionUUID, const char* username, const cha
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->SendLogin(std::string(username), std::string(password));
+}
+
+
+
+JMPDLL_API bool IsLoggedIn(const char* connectionUUID) {
+	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
+	//  is valid then continue and get the jmp connection object from our dictionary.
+	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
+
+	return jniorJmp->IsLoggedIn();
 }
 
 

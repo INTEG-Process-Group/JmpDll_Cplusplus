@@ -94,8 +94,7 @@ extern "C" {
 	typedef int (*ConnectionCallbackFunction)(char* sessionId);
 	
 	JMPDLL_API int SetConnectionCallback(ConnectionCallbackFunction callback);
-	JMPDLL_API int SetAuthenticationFailedCallback(ConnectionCallbackFunction callback);
-	JMPDLL_API int SetAuthenticatedCallback(ConnectionCallbackFunction callback);
+	JMPDLL_API int SetAuthenticationCallback(ConnectionCallbackFunction callback);
 
 
 	/**
