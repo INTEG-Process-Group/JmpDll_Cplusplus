@@ -82,6 +82,8 @@ extern "C" {
 
 	/***** GLOBAL METHODS ********************************************************/
 
+	JMPDLL_API int Log(const std::string message);
+
 	/**
 	 * @brief  Gets the compiled DLL version in the format YEAR.VERSION.BUILD
 	 *

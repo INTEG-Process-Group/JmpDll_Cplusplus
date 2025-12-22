@@ -54,7 +54,6 @@ int JniorJmp::SetAuthenticationCallback(CallbackFunction callback) {
 
 
 
-int JniorJmp::SetMonitorCallback(ConnectionCallbackFunction callback) {
 int JniorJmp::SetMonitorCallback(CallbackFunction callback) {
 	this->MonitorCallback = callback;
 	return 0;
@@ -129,7 +128,6 @@ void JniorJmp::MessageReceived(json json_obj) {
 	this->logfile->log(this->m_ipAddress + std::string(" >>> ") + json_obj.dump());
 
 	std::string message = json_obj["Message"];
-	std::cout << message << std::endl;
 
 	// is there a Meta object with a Hash value?
 	std::string hash;
@@ -141,7 +139,7 @@ void JniorJmp::MessageReceived(json json_obj) {
 
 		this->_nonce = json_obj["Nonce"];
 		if (0 == this->_loginFailureCount++) {
-			this->SendLogin("jnior", "jnior2", this->_nonce);
+			this->SendLogin("jnior", "jnior", this->_nonce);
 		}
 		else {
 

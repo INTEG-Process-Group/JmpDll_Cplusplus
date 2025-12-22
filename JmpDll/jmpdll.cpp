@@ -125,6 +125,13 @@ int validate_device_type(const std::string deviceId, int deviceType) {
 
 
 
+JMPDLL_API int Log(const std::string message) {
+	logfile.log(message);
+	return 0;
+}
+
+
+
 JMPDLL_API int GetDllVersion(char* versionString) {
 	sprintf(versionString, "%d.%d.%d", 25, 1, 23);
 	return 0;
