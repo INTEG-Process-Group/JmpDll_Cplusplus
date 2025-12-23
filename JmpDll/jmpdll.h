@@ -13,25 +13,40 @@
 
 extern "C" {
 	/***** RETURN CODES **********************************************************/
-	JMPDLL_API int OK = 0;
-	JMPDLL_API int INVALID_IP_ADDRESS = -101;
-	JMPDLL_API int INVALID_UUID = -102;
-	JMPDLL_API int INVALID_DEVICE_ID = -103;
-	JMPDLL_API int WRONG_DEVICE_TYPE = -104;
-	JMPDLL_API int INVALID_ARGUMENT = -105;
-	JMPDLL_API int CHANNEL_OUT_OF_RANGE = -106;
-	JMPDLL_API int MODULE_DOES_NOT_EXIST = -107;
+	JMPDLL_API enum RETURN_CODES_ENUM {
+		OK = 0,
+		INVALID_IP_ADDRESS = -101,
+		INVALID_UUID = -102,
+		INVALID_DEVICE_ID = -103,
+		WRONG_DEVICE_TYPE = -104,
+		INVALID_ARGUMENT = -105,
+		CHANNEL_OUT_OF_RANGE = -106,
+		MODULE_DOES_NOT_EXIST = -107
+	};
+
+	JMPDLL_API enum CONNECTION_STATUS_ENUM {
+		NOT_CONNECTED, CONNECTING, CONNECTED, CONNECTION_FAILED, CONNECTION_LOST
+	};
+
+	JMPDLL_API enum AUTHENTICATION_STATUS_ENUM {
+		NOT_AUTHENTICATED, AUTHENTICATING, ADMINISTRATOR, USER, GUEST, AUTHENTICATION_FAILED
+	};
 
 
 	/***** ENTERNAL DEVICE TYPES *************************************************/
-	JMPDLL_API int FOUR_TWENTY_MODULE_ID = 0xfe;
-	JMPDLL_API int TEN_VOLT_MODULE_ID = 0xfd;
-	//JMPDLL_API int RTD_MODULE_ID = 0xfc;
-	JMPDLL_API int FOUR_ROUT_MODULE_ID = 0xfb;
-	JMPDLL_API int CONTROL_PANEL_MODULE_ID = 0xfa;
-	JMPDLL_API int THREE_CHANNEL_DIMMER_MODULE_ID = 0xf9;
-	JMPDLL_API int OCTAL_INPUT_MODULE_ID = 0xf8;
-	JMPDLL_API int ENVIRON_SENSOR_ID = 0x7e;
+	JMPDLL_API enum DEVICE_TYPE_ENUM {
+		//EIGHT_BIT_TEMPERATURE_PROBE = 0x10,
+		TWELVE_BIT_TEMPERATURE_PROBE = 0x28,
+		ENVIRONMENTAL_SENSOR = 0x7e,
+		OCTAL_INPUT_MODULE = 0xf8,
+		THREE_CHANNEL_DIMMER = 0xf9,
+		CONTROL_PANEL = 0xfa,
+		FOUR_RELAY_OUT_MODULE = 0xfb,
+		//RTD_MODULE = 0xfc,
+		TEN_VOLT_MODULE = 0xfd,
+		FOUR_TWENTY_MILLIAMP_MODULE = 0xfe,
+		INTERNAL = 0xff
+	};
 
 
 	/***** STRUCTURES ************************************************************/
@@ -161,6 +176,10 @@ extern "C" {
 	 */
 	JMPDLL_API bool IsConnected(const char* connectionUUID);
 
+	JMPDLL_API int GetConnectionStatus(const char* connectionUUID);
+
+	JMPDLL_API std::string GetConnectionStatusDescription(const char* connectionUUID);
+
 	/**
 	 * @brief		returns whether the connection referenced by the connectionUUID is currently 
 	 *				logged in to a JNIOR
@@ -171,6 +190,10 @@ extern "C" {
 	 * @param  ipAddress  of the JNIOR to get the logged in status from
 	 */
 	JMPDLL_API bool IsLoggedIn(const char* connectionUUID);
+
+	JMPDLL_API int GetAuthenticationStatus(const char* connectionUUID);
+
+	JMPDLL_API std::string GetAuthenticationStatusDescription(const char* connectionUUID);
 
 
 	/*****   INTERNAL IO   *******************************************************/

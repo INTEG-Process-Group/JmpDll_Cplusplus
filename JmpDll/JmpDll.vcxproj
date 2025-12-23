@@ -158,13 +158,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="connection_status.hpp" />
     <ClInclude Include="hex_utils.hpp" />
     <ClInclude Include="jmpdll.h" />
     <ClInclude Include="jmp_message.hpp" />
     <ClInclude Include="jnior_jmp.hpp" />
+    <ClInclude Include="jnior_structs.hpp" />
     <ClInclude Include="Json.h" />
     <ClInclude Include="logger.hpp" />
     <ClInclude Include="md5.h" />
+    <ClInclude Include="status.hpp" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

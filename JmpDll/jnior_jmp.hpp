@@ -8,6 +8,10 @@ using json = nlohmann::json;
 
 #include "logger.hpp"
 
+#include "jmpdll.h"
+
+#include "connection_status.hpp"
+
 
 typedef int(*CallbackFunction)(char* sessionId);
 
@@ -24,6 +28,8 @@ private:
 	char* m_ipAddress;
 	SOCKET m_sckt;
 
+	DWORD m_dwThreadId;
+
 	std::mutex mtx;
 	std::condition_variable cv;
 	bool dataReady = false;
@@ -33,6 +39,9 @@ private:
 
 	bool _loggedIn = false;
 	int _loginFailureCount = 0;
+
+	ConnectionStatus _connectionStatus;
+	int _authenticationStatus = AUTHENTICATION_STATUS_ENUM::NOT_AUTHENTICATED;
 
 public:
 	bool b_quit;
@@ -96,6 +105,33 @@ public:
 
 	CallbackFunction getConnectionCallback() {
 		return this->ConnectionCallback;
+	}
+
+	//int GetConnectionStatus();
+	//std::string GetConnectionStatusDescription();
+
+	//void setConnectionStatus(CONNECTION_STATUS_ENUM connectionStatus) {
+
+	//	// save the connection status and then alert the listener
+	//	_connectionStatus = connectionStatus;
+
+	//	if (nullptr != this->ConnectionCallback) {
+	//		this->ConnectionCallback(this->m_uuid);
+	//	}
+	//}
+
+
+	int GetAuthenticationStatus();
+	std::string GetAuthenticationStatusDescription();
+
+	void setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM authenticationStatus) {
+
+		// save the status and alert the listener
+		_authenticationStatus = authenticationStatus;
+
+		if (nullptr != this->AuthenticationCallback) {
+			this->AuthenticationCallback(this->m_uuid);
+		}
 	}
 
 private:

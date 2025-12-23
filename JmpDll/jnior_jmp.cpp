@@ -11,8 +11,6 @@
 
 static DWORD WINAPI receiverThread(LPVOID *lparam);
 
-int CHANNEL_OUT_OF_RANGE = -106;
-
 
 
 JniorJmp::JniorJmp(const char* ipAddress, int port) {
@@ -61,6 +59,66 @@ int JniorJmp::SetMonitorCallback(CallbackFunction callback) {
 
 
 
+//int JniorJmp::GetConnectionStatus() {
+//	return this->_connectionStatus;
+//}
+//
+//
+//
+//std::string JniorJmp::GetConnectionStatusDescription() {
+//	switch (this->_connectionStatus) {
+//	case CONNECTION_STATUS_ENUM::NOT_CONNECTED:
+//		return "not connected";
+//
+//	case CONNECTION_STATUS_ENUM::CONNECTING:
+//		return "connecting...";
+//
+//	case CONNECTION_STATUS_ENUM::CONNECTED:
+//		return "connected";
+//
+//	case CONNECTION_STATUS_ENUM::CONNECTION_FAILED:
+//		return "failed to connect";
+//
+//	case CONNECTION_STATUS_ENUM::CONNECTION_LOST:
+//		return "connection lost";
+//
+//	default:
+//		return "UNKNOWN";
+//	}
+//}
+
+
+
+int JniorJmp::GetAuthenticationStatus() {
+	return this->_authenticationStatus;
+}
+
+
+
+std::string JniorJmp::GetAuthenticationStatusDescription() {
+	switch (this->_authenticationStatus) {
+	case AUTHENTICATION_STATUS_ENUM::NOT_AUTHENTICATED:
+		return "not authenticated";
+
+	case AUTHENTICATION_STATUS_ENUM::AUTHENTICATING:
+		return "authenticating...";
+
+	case AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR:
+		return "authenticated as administrator";
+
+	case AUTHENTICATION_STATUS_ENUM::USER:
+		return "authenticated as user";
+
+	case AUTHENTICATION_STATUS_ENUM::GUEST:
+		return "authenticated as guest";
+
+	default:
+		return "UNKNOWN";
+	}
+}
+
+
+
 SOCKET JniorJmp::getSocket() {
 	return this->m_sckt;
 }
@@ -79,36 +137,36 @@ int JniorJmp::Connect()
 		WSACleanup();
 	}
 
+	this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTING);
+
 	// everything looks good, continue to connect
 	sck_add.sin_family = AF_INET;
 	sck_add.sin_addr.s_addr = inet_addr(this->m_ipAddress);
 	sck_add.sin_port = htons(9220);
-
-	// try to connect
-	int connectResult = connect(this->m_sckt, (sockaddr *)&sck_add, sizeof(sockaddr_in));
+	int connectResult = connect(this->m_sckt, (sockaddr*)&sck_add, sizeof(sockaddr_in));
 
 	if (0 == connectResult) {
 		// we were successfully connected.  start a receiver thread
-		DWORD m_dwThreadId;
 		HANDLE m_hThread = CreateThread(
 			NULL,										// default security attributes 
 			0,											// use default stack size  
 			(LPTHREAD_START_ROUTINE)receiverThread,  	// thread function 
 			(LPVOID*)this,       						// argument to thread function 
 			0,											// use default creation flags 
-			&m_dwThreadId);								// returns the thread identifier 
+			&this->m_dwThreadId);						// returns the thread identifier 
 
 		_loginFailureCount = 0;
 
+		this->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTED);
+
 		// we were successfully connected.  send an empty message so that we get an 
 		//  unauthenticated response with a Nonce to use in our login message
-		this->Send(JmpMessage("").dump().c_str());
-	}
+		this->Send(JmpMessage().dump().c_str());
 
-	// if we have a connection callback then call it.  we do this whether the connection was 
-	//  successful or not
-	if (nullptr != this->ConnectionCallback) {
-		this->ConnectionCallback(this->m_uuid);
+	}
+	else {
+		this->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTION_FAILED);
+
 	}
 
 	// we cant return until the connection has been negotiated
@@ -140,15 +198,10 @@ void JniorJmp::MessageReceived(json json_obj) {
 		this->_nonce = json_obj["Nonce"];
 		if (0 == this->_loginFailureCount++) {
 			this->SendLogin("jnior", "jnior", this->_nonce);
+			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::AUTHENTICATING);
 		}
 		else {
-
-			// if we have an authentication callback then call it.  we only do this if this is not 
-			//  the first failure.  when the authentication fails the first time we will 
-			//  automatically respond with the default credentials.
-			if (nullptr != this->AuthenticationCallback) {
-				this->AuthenticationCallback(this->m_uuid);
-			}
+			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::AUTHENTICATION_FAILED);
 		}
 
 	}
@@ -158,10 +211,16 @@ void JniorJmp::MessageReceived(json json_obj) {
 
 		_loggedIn = true;
 
-		// if we have an authentication callback then call it.  the user will have to call 
-		//  IsLoggedIn() to find out that the login was successful here
-		if (nullptr != this->AuthenticationCallback) {
-			this->AuthenticationCallback(this->m_uuid);
+		if (json_obj["Administrator"]) {
+			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR);
+		}
+		else {
+			if (json_obj["Control"]) {
+				this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::USER);
+			}
+			else {
+				this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::GUEST);
+			}
 		}
 
 		std::unique_lock<std::mutex> lock(mtx);
@@ -468,11 +527,8 @@ static DWORD WINAPI receiverThread(LPVOID *lparam)
 		jniorJmp->logfile->error("error: " + std::string(e.what()));
 	}
 
-	// if we have a connection callback then call it.  we do this whether the connection was 
-	//  successful or not
-	if (nullptr != jniorJmp->getConnectionCallback()) {
-		jniorJmp->getConnectionCallback()(jniorJmp->getUUID());
-	}
+	// set the connection status to CLOSED
+	jniorJmp->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTION_LOST);
 
 	jniorJmp->logfile->log("listener done.");
 

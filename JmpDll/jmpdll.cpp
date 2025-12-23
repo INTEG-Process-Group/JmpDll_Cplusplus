@@ -104,23 +104,23 @@ bool validate_uuid(const char* connectionUUID) {
 
 int validate_device_type(const std::string deviceId, int deviceType) {
 	// validate a device id was givena and the length of the device id
-	if (16 != deviceId.length()) return INVALID_DEVICE_ID;
+	if (16 != deviceId.length()) return RETURN_CODES_ENUM::INVALID_DEVICE_ID;
 
 	try {
 		// validate the device type
 		long long deviceAddress = std::stoull(deviceId, nullptr, 16);
 		if (deviceType != (deviceAddress & 0xff)) {
-			return WRONG_DEVICE_TYPE;
+			return RETURN_CODES_ENUM::WRONG_DEVICE_TYPE;
 		}
 	}
 	catch (const std::out_of_range& oor) {
-		return INVALID_DEVICE_ID;
+		return RETURN_CODES_ENUM::INVALID_DEVICE_ID;
 	}
 	catch (const std::invalid_argument& ia) {
-		return INVALID_DEVICE_ID;
+		return RETURN_CODES_ENUM::INVALID_DEVICE_ID;
 	}
 
-	return OK;
+	return RETURN_CODES_ENUM::OK;
 }
 
 
@@ -174,7 +174,7 @@ JMPDLL_API int CreateConnection(const char* ipAddress, char* connectionUUID) {
 	logfile.log(std::string("get connection for ip address: ") + std::string(ipAddress));
 
 	// make sure there was a valid ip address provided
-	if (0 == strlen(ipAddress)) return INVALID_IP_ADDRESS;
+	if (0 == strlen(ipAddress)) return RETURN_CODES_ENUM::INVALID_IP_ADDRESS;
 
 	// create a JniorJmp instance and assign it to our connections dictionary
 	JniorJmp* jniorJmp = new JniorJmp(ipAddress);
@@ -200,7 +200,7 @@ JMPDLL_API int CreateConnection(const char* ipAddress, char* connectionUUID) {
 JMPDLL_API int Connect(const char* connectionUUID) {
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->Connect();
@@ -208,10 +208,32 @@ JMPDLL_API int Connect(const char* connectionUUID) {
 
 
 
+JMPDLL_API int GetConnectionStatus(const char* connectionUUID) {
+	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
+	//  is valid then continue and get the jmp connection object from our dictionary.
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
+	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
+
+	return jniorJmp->GetConnectionStatus();
+}
+
+
+
+JMPDLL_API std::string GetConnectionStatusDescription(const char* connectionUUID) {
+	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
+	//  is valid then continue and get the jmp connection object from our dictionary.
+	if (!validate_uuid(connectionUUID)) return "INVALID_UUID";
+	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
+
+	return jniorJmp->GetConnectionStatusDescription();
+}
+
+
+
 JMPDLL_API int Login(const char* connectionUUID, const char* username, const char* password) {
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->SendLogin(std::string(username), std::string(password));
@@ -222,10 +244,32 @@ JMPDLL_API int Login(const char* connectionUUID, const char* username, const cha
 JMPDLL_API bool IsLoggedIn(const char* connectionUUID) {
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->IsLoggedIn();
+}
+
+
+
+JMPDLL_API int GetAuthenticationStatus(const char* connectionUUID) {
+	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
+	//  is valid then continue and get the jmp connection object from our dictionary.
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
+	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
+
+	return jniorJmp->GetAuthenticationStatus();
+}
+
+
+
+JMPDLL_API std::string GetAuthenticationStatusDescription(const char* connectionUUID) {
+	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
+	//  is valid then continue and get the jmp connection object from our dictionary.
+	if (!validate_uuid(connectionUUID)) return "INVALID_UUID";
+	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
+
+	return jniorJmp->GetAuthenticationStatusDescription();
 }
 
 
@@ -234,7 +278,7 @@ JMPDLL_API int GetInput(const char* connectionUUID, int channelNumber) {
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->GetInput(channelNumber);
@@ -246,7 +290,7 @@ JMPDLL_API int GetOutput(const char* connectionUUID, int channelNumber) {
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	return jniorJmp->GetOutput(channelNumber);
@@ -258,7 +302,7 @@ JMPDLL_API int ControlOutput(const char* connectionUUID, const char* command, in
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	jniorJmp->ControlOutput(command, channelNumber);
@@ -302,7 +346,7 @@ JMPDLL_API int ReadRegistryKeys(const char* connectionUUID, REGISTRY_KEY* regist
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	// build a vector with the key names that we want to read
@@ -337,7 +381,7 @@ JMPDLL_API int EnumerateDevices(const char* connectionUUID, char** connectedDevi
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	json devicesJson = jniorJmp->enumerateDevices();
@@ -357,11 +401,11 @@ JMPDLL_API int GetTemperature(const char* connectionUUID, const char* deviceId, 
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	// validate the deviceId
-	int deviceTypeCheck = validate_device_type(deviceId, 0x28);
+	int deviceTypeCheck = validate_device_type(deviceId, DEVICE_TYPE_ENUM::TWELVE_BIT_TEMPERATURE_PROBE);
 	if (OK != deviceTypeCheck) return deviceTypeCheck;
 
 	for (int i = 0; i < 3; i++) {
@@ -396,8 +440,8 @@ JMPDLL_API int GetTemperatureByChannel(const char* connectionUUID, int channel, 
 	int readResult = ReadRegistryKeys(connectionUUID, registryKeys, 1);
 	std::string deviceId = registryKeys[0].value;
 
-	if (nullptr == registryKeys[0].value) return MODULE_DOES_NOT_EXIST;
-	if (0 == deviceId.length()) return MODULE_DOES_NOT_EXIST;
+	if (nullptr == registryKeys[0].value) return RETURN_CODES_ENUM::MODULE_DOES_NOT_EXIST;
+	if (0 == deviceId.length()) return RETURN_CODES_ENUM::MODULE_DOES_NOT_EXIST;
 
 	return GetTemperature(connectionUUID, deviceId.c_str(), temp_struct);
 }
@@ -409,7 +453,7 @@ int ReadDevice(const char* connectionUUID, const std::string deviceId, char* dev
 
 	// make sure the provided connection uuid is valid and is found in the connection map.  if it 
 	//  is valid then continue and get the jmp connection object from our dictionary.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
 	// perform up to three read attempts.  one wire reads can fail so this loop allows for two retries
@@ -437,14 +481,14 @@ int ReadDevice(const char* connectionUUID, const std::string deviceId, char* dev
 JMPDLL_API int GetEnviron(const char* connectionUUID, const char* deviceId, ENVIRON* environ_struct) {
 
 	// make sure the provided connection uuid is valid and is found in the connection map.
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 
 	// validate the deviceId
-	int deviceTypeCheck = validate_device_type(deviceId, 0x7e);
+	int deviceTypeCheck = validate_device_type(deviceId, DEVICE_TYPE_ENUM::ENVIRONMENTAL_SENSOR);
 	if (OK != deviceTypeCheck) return deviceTypeCheck;
 
 	// validate the ENVIRON
-	if (nullptr == environ_struct) return INVALID_ARGUMENT;
+	if (nullptr == environ_struct) return RETURN_CODES_ENUM::INVALID_ARGUMENT;
 
 	char* deviceResponse = new char[32];
 	int readDeviceResult = ReadDevice(connectionUUID, deviceId, deviceResponse);
@@ -477,11 +521,11 @@ JMPDLL_API int GetEnviron(const char* connectionUUID, const char* deviceId, ENVI
 JMPDLL_API int GetTenVolt(const char* connectionUUID, const char* deviceId, TEN_VOLT* ten_volt_struct) {
 
 	// validate the deviceId
-	int deviceTypeCheck = validate_device_type(deviceId, TEN_VOLT_MODULE_ID);
+	int deviceTypeCheck = validate_device_type(deviceId, DEVICE_TYPE_ENUM::TEN_VOLT_MODULE);
 	if (OK != deviceTypeCheck) return deviceTypeCheck;
 
 	// validate the TEN_VOLT
-	if (nullptr == ten_volt_struct) return INVALID_ARGUMENT;
+	if (nullptr == ten_volt_struct) return RETURN_CODES_ENUM::INVALID_ARGUMENT;
 
 	char* deviceResponse = new char[32];
 	int readDeviceResult = ReadDevice(connectionUUID, std::string(deviceId), deviceResponse);
@@ -506,7 +550,7 @@ JMPDLL_API int GetTenVolt(const char* connectionUUID, const char* deviceId, TEN_
 
 int WriteDevice(const char* connectionUUID, const std::string deviceId, const std::string writeHex) {
 	// make sure the provided connection uuid is valid and is found in the connection map
-	if (!validate_uuid(connectionUUID)) return INVALID_UUID;
+	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 
 	// get the connection from the UUID
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
@@ -530,11 +574,11 @@ int WriteDevice(const char* connectionUUID, const std::string deviceId, const st
 JMPDLL_API int SetTenVolt(const char* connectionUUID, const std::string deviceId, const TEN_VOLT* ten_volt_struct) {
 
 	// validate the deviceId
-	int deviceTypeCheck = validate_device_type(deviceId, TEN_VOLT_MODULE_ID);
+	int deviceTypeCheck = validate_device_type(deviceId, DEVICE_TYPE_ENUM::TEN_VOLT_MODULE);
 	if (OK != deviceTypeCheck) return deviceTypeCheck;
 
 	// validate the TEN_VOLT
-	if (nullptr == ten_volt_struct) return INVALID_ARGUMENT;
+	if (nullptr == ten_volt_struct) return RETURN_CODES_ENUM::INVALID_ARGUMENT;
 
 	std::stringstream ss;
 	// Use std::hex manipulator to set the base to hexadecimal
@@ -563,11 +607,11 @@ JMPDLL_API int SetTenVoltChannelPercentage(const char* connectionUUID, int chann
 	int readResult = ReadRegistryKeys(connectionUUID, registryKeys, 1);
 	std::string deviceId = registryKeys[0].value;
 
-	if (nullptr == registryKeys[0].value) return MODULE_DOES_NOT_EXIST;
-	if (0 == deviceId.length()) return MODULE_DOES_NOT_EXIST;
+	if (nullptr == registryKeys[0].value) return RETURN_CODES_ENUM::MODULE_DOES_NOT_EXIST;
+	if (0 == deviceId.length()) return RETURN_CODES_ENUM::MODULE_DOES_NOT_EXIST;
 
 	// validate the percentage range
-	if (0 > percentage || 100 < percentage) return INVALID_ARGUMENT;
+	if (0 > percentage || 100 < percentage) return RETURN_CODES_ENUM::INVALID_ARGUMENT;
 
 	// get the 10v structure for the device.  if it does not exist then we must 
 	//  create it and perform an initial read
