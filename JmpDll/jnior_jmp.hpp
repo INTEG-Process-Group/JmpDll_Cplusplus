@@ -31,7 +31,7 @@ private:
 	char* m_ipAddress;
 	SOCKET m_sckt;
 
-	DWORD m_dwThreadId;
+	std::thread _receiverThread;
 
 	std::mutex mtx;
 	std::condition_variable cv;

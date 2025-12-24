@@ -66,7 +66,7 @@ int JniorJmp::Connect()
 	if (0 == connectResult) {
 		// we were successfully connected.  start a receiver thread
 
-		std::thread t(receiverThread, (void*)this);
+		_receiverThread = std::thread(receiverThread, (void*)this);
 
 		//unsigned long m_dwThreadId;
 		//HANDLE m_hThread = CreateThread(

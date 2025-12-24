@@ -1292,3 +1292,88 @@
 [Wed, 24 Dec 2025 11:55:08.897] 10.0.0.62 <<< {"Auth-Digest": "jnior:cd734f10f30165714861a075e92bf985"}
 [Wed, 24 Dec 2025 11:55:08.974] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766595310406,"Version":"v2.5.2"}
 [Wed, 24 Dec 2025 11:55:08.975] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:18:46.529] --------------------
+[Wed, 24 Dec 2025 12:18:46.529] Process Attach
+[Wed, 24 Dec 2025 12:18:46.736] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:18:46.736] --------------------
+[Wed, 24 Dec 2025 12:18:46.746] assign connection uuid: 0000d702
+[Wed, 24 Dec 2025 12:18:46.753] listener started
+[Wed, 24 Dec 2025 12:18:46.753] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:18:46.823] 10.0.0.62 >>> {"Message":"Error","Nonce":"bb62b74677f8b455322d33e54d2c","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:18:46.824] 10.0.0.62 <<< {"Auth-Digest": "jnior:e6e7f0604a5b4b5e14ca559339a332ae"}
+[Wed, 24 Dec 2025 12:18:46.920] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766596728375,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 12:18:46.921] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:18:51.396] Process Detach
+[Wed, 24 Dec 2025 12:19:02.281] --------------------
+[Wed, 24 Dec 2025 12:19:02.283] Process Attach
+[Wed, 24 Dec 2025 12:19:41.421] --------------------
+[Wed, 24 Dec 2025 12:19:41.425] Process Attach
+[Wed, 24 Dec 2025 12:19:41.633] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:19:41.634] --------------------
+[Wed, 24 Dec 2025 12:19:41.648] assign connection uuid: 00007dba
+[Wed, 24 Dec 2025 12:19:41.654] listener started
+[Wed, 24 Dec 2025 12:19:41.654] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:19:41.763] 10.0.0.62 >>> {"Message":"Error","Nonce":"4fd68a7b1ff0fe33691f08b9b5a1","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:19:41.764] 10.0.0.62 <<< {"Auth-Digest": "jnior:27bebcb30be7712e0cba1dcfd4362027"}
+[Wed, 24 Dec 2025 12:20:26.783] --------------------
+[Wed, 24 Dec 2025 12:20:26.786] Process Attach
+[Wed, 24 Dec 2025 12:20:26.945] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:20:26.946] --------------------
+[Wed, 24 Dec 2025 12:20:26.959] assign connection uuid: 0000d335
+[Wed, 24 Dec 2025 12:20:26.968] listener started
+[Wed, 24 Dec 2025 12:20:26.969] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:20:27.064] 10.0.0.62 >>> {"Message":"Error","Nonce":"19c3a3b4070fe7c92490a1a20763","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:20:35.696] --------------------
+[Wed, 24 Dec 2025 12:20:35.698] Process Attach
+[Wed, 24 Dec 2025 12:20:35.804] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:20:35.805] --------------------
+[Wed, 24 Dec 2025 12:20:35.812] assign connection uuid: 00007bab
+[Wed, 24 Dec 2025 12:20:35.818] listener started
+[Wed, 24 Dec 2025 12:20:35.818] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:20:35.947] 10.0.0.62 >>> {"Message":"Error","Nonce":"49e4921c9b99f986d54602c2185c","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:20:35.948] 10.0.0.62 <<< {"Auth-Digest": "jnior:aa4b8a31955438ea26f4fb1df91dce1a"}
+[Wed, 24 Dec 2025 12:20:36.017] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766596837472,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 12:20:36.018] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:20:45.664] --------------------
+[Wed, 24 Dec 2025 12:20:45.666] Process Attach
+[Wed, 24 Dec 2025 12:20:45.875] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:20:45.876] --------------------
+[Wed, 24 Dec 2025 12:20:45.886] assign connection uuid: 000043dd
+[Wed, 24 Dec 2025 12:20:45.897] listener started
+[Wed, 24 Dec 2025 12:20:45.897] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:20:46.018] 10.0.0.62 >>> {"Message":"Error","Nonce":"5a0e1d6ec069d4e1697b26313a1c","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:20:46.018] 10.0.0.62 <<< {"Auth-Digest": "jnior:fb4baceb76a083539f8f7abed6587fa2"}
+[Wed, 24 Dec 2025 12:20:46.090] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766596847556,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 12:20:46.092] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:20:47.738] Process Detach
+[Wed, 24 Dec 2025 12:20:53.326] --------------------
+[Wed, 24 Dec 2025 12:20:53.329] Process Attach
+[Wed, 24 Dec 2025 12:20:53.488] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:20:53.489] --------------------
+[Wed, 24 Dec 2025 12:20:53.499] assign connection uuid: 00007d9d
+[Wed, 24 Dec 2025 12:21:02.474] listener started
+[Wed, 24 Dec 2025 12:21:03.460] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:21:04.588] 10.0.0.62 >>> {"Message":"Error","Nonce":"54e7c560a9fea07e0ac00d4ff8aa","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:21:04.591] 10.0.0.62 <<< {"Auth-Digest": "jnior:712c2149a30cd70eb11711a69ba9e250"}
+[Wed, 24 Dec 2025 12:21:04.691] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766596866141,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 12:21:04.693] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:22:29.595] --------------------
+[Wed, 24 Dec 2025 12:22:29.597] Process Attach
+[Wed, 24 Dec 2025 12:22:29.751] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:22:29.753] --------------------
+[Wed, 24 Dec 2025 12:22:29.765] assign connection uuid: 000051d8
+[Wed, 24 Dec 2025 12:22:29.771] listener started
+[Wed, 24 Dec 2025 12:22:29.772] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:22:37.788] --------------------
+[Wed, 24 Dec 2025 12:22:37.792] Process Attach
+[Wed, 24 Dec 2025 12:22:37.903] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 12:22:37.903] --------------------
+[Wed, 24 Dec 2025 12:22:37.912] assign connection uuid: 00009297
+[Wed, 24 Dec 2025 12:22:37.921] listener started
+[Wed, 24 Dec 2025 12:22:37.922] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 12:22:38.038] 10.0.0.62 >>> {"Message":"Error","Nonce":"8d555c0a6126e84d681727a90760","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 12:22:38.039] 10.0.0.62 <<< {"Auth-Digest": "jnior:e972f8de0619bf92d75c478c75c3d7f9"}
+[Wed, 24 Dec 2025 12:22:38.116] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766596959568,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 12:22:38.118] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 12:22:38.118] connection negotiated
+[Wed, 24 Dec 2025 12:22:44.551] Process Detach
