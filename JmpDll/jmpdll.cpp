@@ -20,12 +20,59 @@ using json = nlohmann::json;
 #include "jmpdll.h"
 
 
-#pragma comment(lib,"WS2_32") 
+
+
+#ifdef _WIN32
+
+/* Windows-specific includes and setup */
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib") // Link with Winsock library
+
+#else
+
+/* POSIX (Linux/macOS) includes and definitions */
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <netdb.h>
+typedef int SOCKET;           // Normalize socket type
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+
+#endif
+
+// Utility to initialize the socket system
+bool init_sockets() {
+#ifdef _WIN32
+	WSADATA wsaData;
+	return WSAStartup(MAKEWORD(2, 2), &wsaData) == 0; // Windows requires startup
+#else
+	return true; // No initialization needed on Linux/macOS
+#endif
+}
+
+// Utility to clean up the socket system
+void cleanup_sockets() {
+#ifdef _WIN32
+	WSACleanup();
+#endif
+}
+
+// Utility to close a single socket
+void close_socket(SOCKET s) {
+#ifdef _WIN32
+	closesocket(s); // Windows uses closesocket
+#else
+	close(s);       // POSIX uses standard close
+#endif
+}
 
 
 
-// This function or variable may be unsafe. Consider using sprintf_s instead.
-#pragma warning(disable : 4996)
 
 
 
@@ -55,11 +102,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		// dumps memory leaks to the debug window
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-		// Startup Winsock
-		logfile.log("Start up Winsock");
-		if (WSAStartup(MAKEWORD(2, 2), &wd) != NO_ERROR)
+		// init sockets
+		if (!init_sockets())
 		{
-			logfile.error("Error at WSAStartup()\n");
+			logfile.error("Failed to initialize sockets");
 			return false;
 		}
 
@@ -80,7 +126,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		//	delete ((JniorJmp*)(pair.second));
 		//}
 
-		//WSACleanup();
+		//cleanup_sockets();
 		break;
 	}
 
@@ -214,7 +260,7 @@ JMPDLL_API int GetConnectionStatus(const char* connectionUUID) {
 	if (!validate_uuid(connectionUUID)) return RETURN_CODES_ENUM::INVALID_UUID;
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
-	return jniorJmp->GetConnectionStatus();
+	return jniorJmp->GetConnectionStatus().getStatus();
 }
 
 
@@ -225,7 +271,7 @@ JMPDLL_API std::string GetConnectionStatusDescription(const char* connectionUUID
 	if (!validate_uuid(connectionUUID)) return "INVALID_UUID";
 	JniorJmp* jniorJmp = jnior_connections[connectionUUID];
 
-	return jniorJmp->GetConnectionStatusDescription();
+	return jniorJmp->GetConnectionStatus().GetConnectionStatusDescription();
 }
 
 

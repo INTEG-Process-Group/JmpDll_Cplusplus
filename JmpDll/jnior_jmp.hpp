@@ -91,6 +91,8 @@ public:
 
 	json enumerateDevices();
 
+
+
 	/**
 	 * @brief		Reads a device
 	 *
@@ -103,9 +105,22 @@ public:
 	json ReadDevice(std::string deviceId);
 	int WriteDevice(std::string deviceId, std::string hexOutput);
 
+
+
 	CallbackFunction getConnectionCallback() {
 		return this->ConnectionCallback;
 	}
+
+
+
+	/**
+	 * @brief		Returns the connection status object
+	 */
+	ConnectionStatus GetConnectionStatus() {
+		return _connectionStatus;
+	}
+
+
 
 	//int GetConnectionStatus();
 	//std::string GetConnectionStatusDescription();

@@ -157,7 +157,7 @@ int JniorJmp::Connect()
 
 		_loginFailureCount = 0;
 
-		this->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTED);
+		this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTED);
 
 		// we were successfully connected.  send an empty message so that we get an 
 		//  unauthenticated response with a Nonce to use in our login message
@@ -165,7 +165,7 @@ int JniorJmp::Connect()
 
 	}
 	else {
-		this->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTION_FAILED);
+		this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTION_FAILED);
 
 	}
 
@@ -528,7 +528,7 @@ static DWORD WINAPI receiverThread(LPVOID *lparam)
 	}
 
 	// set the connection status to CLOSED
-	jniorJmp->setConnectionStatus(CONNECTION_STATUS_ENUM::CONNECTION_LOST);
+	jniorJmp->GetConnectionStatus().setStatus(CONNECTION_STATUS_ENUM::CONNECTION_LOST);
 
 	jniorJmp->logfile->log("listener done.");
 

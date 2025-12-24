@@ -35,3 +35,8 @@
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+
+
+
+// This function or variable may be unsafe. Consider using sprintf_s instead.
+#pragma warning(disable : 4996)
