@@ -1,7 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 
-#pragma once
-
 #include <iterator>
 
 // for double NaN
@@ -21,31 +19,6 @@ using json = nlohmann::json;
 
 
 
-
-#ifdef _WIN32
-
-/* Windows-specific includes and setup */
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#pragma comment(lib, "ws2_32.lib") // Link with Winsock library
-
-#else
-
-/* POSIX (Linux/macOS) includes and definitions */
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <netdb.h>
-typedef int SOCKET;           // Normalize socket type
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-
-#endif
-
-// Utility to initialize the socket system
 bool init_sockets() {
 #ifdef _WIN32
 	WSADATA wsaData;
@@ -55,14 +28,8 @@ bool init_sockets() {
 #endif
 }
 
-// Utility to clean up the socket system
-void cleanup_sockets() {
-#ifdef _WIN32
-	WSACleanup();
-#endif
-}
 
-// Utility to close a single socket
+
 void close_socket(SOCKET s) {
 #ifdef _WIN32
 	closesocket(s); // Windows uses closesocket
@@ -74,24 +41,26 @@ void close_socket(SOCKET s) {
 
 
 
+void cleanup_sockets() {
+#ifdef _WIN32
+	WSACleanup();
+#endif
+}
+
 
 
 std::map<std::string, JniorJmp*> jnior_connections;
 std::map<std::string, TEN_VOLT*> ten_volt_devices_by_id;
 
-
-// winsock data
-WSADATA wd;
-
 std::mutex mtx;
 
 
-#include "Logger.hpp"
 Logger logfile("jmpdll.log");
 
 
 
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+#ifdef _WIN32
+BOOL __stdcall DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 
 	switch (ul_reason_for_call)
@@ -132,6 +101,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 
 	return TRUE;
 }
+#endif
 
 
 

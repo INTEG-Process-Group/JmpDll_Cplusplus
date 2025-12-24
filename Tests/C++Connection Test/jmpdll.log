@@ -1265,3 +1265,30 @@
 [Tue, 23 Dec 2025 12:57:34.521] b4dfd3e1 is authenticated as administrator
 [Tue, 23 Dec 2025 12:57:34.521] connection negotiated
 [Tue, 23 Dec 2025 12:58:03.620] Process Detach
+[Wed, 24 Dec 2025 10:16:33.872] --------------------
+[Wed, 24 Dec 2025 10:16:33.873] Process Attach
+[Wed, 24 Dec 2025 10:16:33.984] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 10:16:33.985] --------------------
+[Wed, 24 Dec 2025 10:16:33.996] assign connection uuid: e542f29d
+[Wed, 24 Dec 2025 10:16:34.001] listener started
+[Wed, 24 Dec 2025 10:16:34.001] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 10:16:34.129] 10.0.0.62 >>> {"Message":"Error","Nonce":"7369183580a8cc9c7e86cab22071","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 10:16:34.131] 10.0.0.62 <<< {"Auth-Digest": "jnior:4c5e64d33882a676a81fd27a1bc840e5"}
+[Wed, 24 Dec 2025 10:16:34.131] e542f29d is authenticating...
+[Wed, 24 Dec 2025 10:16:34.209] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766589395481,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 10:16:34.209] monitor packet received for e542f29d
+[Wed, 24 Dec 2025 10:16:34.210] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}
+[Wed, 24 Dec 2025 10:16:34.211] e542f29d is authenticated as administrator
+[Wed, 24 Dec 2025 10:16:34.211] connection negotiated
+[Wed, 24 Dec 2025 10:16:43.687] Process Detach
+[Wed, 24 Dec 2025 11:55:08.611] --------------------
+[Wed, 24 Dec 2025 11:55:08.612] Process Attach
+[Wed, 24 Dec 2025 11:55:08.772] get connection for ip address: 10.0.0.62
+[Wed, 24 Dec 2025 11:55:08.772] --------------------
+[Wed, 24 Dec 2025 11:55:08.784] assign connection uuid: 000014b2
+[Wed, 24 Dec 2025 11:55:08.790] listener started
+[Wed, 24 Dec 2025 11:55:08.791] 10.0.0.62 <<< {"ACK":""}
+[Wed, 24 Dec 2025 11:55:08.896] 10.0.0.62 >>> {"Message":"Error","Nonce":"eb9132e897c82b3f53ce54ddb21d","Text":"401 Unauthorized"}
+[Wed, 24 Dec 2025 11:55:08.897] 10.0.0.62 <<< {"Auth-Digest": "jnior:cd734f10f30165714861a075e92bf985"}
+[Wed, 24 Dec 2025 11:55:08.974] 10.0.0.62 >>> {"Inputs":[{"Count":1,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":0,"State":0},{"Count":2,"State":0}],"Message":"Monitor","Model":"410","Outputs":[{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0},{"State":0}],"Serial Number":622120001,"Timestamp":1766595310406,"Version":"v2.5.2"}
+[Wed, 24 Dec 2025 11:55:08.975] 10.0.0.62 >>> {"Administrator":true,"Control":true,"Message":"Authenticated"}

@@ -59,7 +59,6 @@ extern "C" {
 		const char* keyName;
 		char* value;
 	};
-#pragma pack(pop)
 
 	/*
 	 * a temperature structure
@@ -69,7 +68,6 @@ extern "C" {
 		double tempC;
 		double tempF;
 	};
-#pragma pack(pop)
 
 	/*
 	 * an environmental structure holding properties that belong to the
@@ -81,7 +79,6 @@ extern "C" {
 		double tempF;
 		double humidity;
 	};
-#pragma pack(pop)
 
 	/*
 	 * INTEG Ten Volt - Type 0xFD
@@ -91,7 +88,6 @@ extern "C" {
 		unsigned short rawIns[4];
 		unsigned short rawOuts[2];
 	};
-#pragma pack(pop)
 
 
 

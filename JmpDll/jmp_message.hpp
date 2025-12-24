@@ -7,12 +7,6 @@ using namespace nlohmann;
 
 
 
-// This function or variable may be unsafe. Consider using sprintf_s instead.
-#pragma warning(disable : 4996)
-
-
-
-
 class JmpMessage
 {
 protected:

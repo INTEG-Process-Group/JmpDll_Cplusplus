@@ -155,13 +155,16 @@ namespace ConsoleApp1
 
             Thread.Sleep(1000);
 
-            StringBuilder[] connectedDevices = new StringBuilder[10];
-            for (int i = 0; i < 10; i++)
-            {
-                connectedDevices[i] = new StringBuilder();
-            }
-            EnumerateDevices(connectionUUID.ToString(),  connectedDevices);
-            Console.WriteLine(connectedDevices);
+
+            //StringBuilder[] connectedDevices = new StringBuilder[10];
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    connectedDevices[i] = new StringBuilder();
+            //}
+            //EnumerateDevices(connectionUUID.ToString(),  connectedDevices);
+            //Console.WriteLine(connectedDevices);
+
+
 
             //for (int j = 7; j >= 0; j--)
             //{

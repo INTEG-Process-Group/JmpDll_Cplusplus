@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "jmp_message.hpp"
 #include "jnior_jmp.hpp"
 
 #include "md5.h"
@@ -9,7 +8,7 @@
 #include <typeinfo>
 
 
-static DWORD WINAPI receiverThread(LPVOID *lparam);
+// void receiverThread(void* lparam);
 
 
 
@@ -20,7 +19,7 @@ JniorJmp::JniorJmp(const char* ipAddress, int port) {
 	std::random_device rd;
 	std::mt19937 engine(rd());
 	std::uniform_int_distribution<int> dist(0, 0xffff);
-	sprintf(this->m_uuid, "%04x%04x", dist(engine), dist(engine));
+	sprintf(this->m_uuid, "%08x", dist(engine));
 
 	// copy the target ip address
 	this->m_ipAddress = new char[strlen(ipAddress)];
@@ -34,87 +33,6 @@ JniorJmp::~JniorJmp() {
 	//delete this->m_ipAddress;
 
 	this->b_quit = true;
-}
-
-
-
-int JniorJmp::SetConnectionCallback(CallbackFunction callback) {
-	this->ConnectionCallback = callback;
-	return 0;
-}
-
-
-
-int JniorJmp::SetAuthenticationCallback(CallbackFunction callback) {
-	this->AuthenticationCallback = callback;
-	return 0;
-}
-
-
-
-int JniorJmp::SetMonitorCallback(CallbackFunction callback) {
-	this->MonitorCallback = callback;
-	return 0;
-}
-
-
-
-//int JniorJmp::GetConnectionStatus() {
-//	return this->_connectionStatus;
-//}
-//
-//
-//
-//std::string JniorJmp::GetConnectionStatusDescription() {
-//	switch (this->_connectionStatus) {
-//	case CONNECTION_STATUS_ENUM::NOT_CONNECTED:
-//		return "not connected";
-//
-//	case CONNECTION_STATUS_ENUM::CONNECTING:
-//		return "connecting...";
-//
-//	case CONNECTION_STATUS_ENUM::CONNECTED:
-//		return "connected";
-//
-//	case CONNECTION_STATUS_ENUM::CONNECTION_FAILED:
-//		return "failed to connect";
-//
-//	case CONNECTION_STATUS_ENUM::CONNECTION_LOST:
-//		return "connection lost";
-//
-//	default:
-//		return "UNKNOWN";
-//	}
-//}
-
-
-
-int JniorJmp::GetAuthenticationStatus() {
-	return this->_authenticationStatus;
-}
-
-
-
-std::string JniorJmp::GetAuthenticationStatusDescription() {
-	switch (this->_authenticationStatus) {
-	case AUTHENTICATION_STATUS_ENUM::NOT_AUTHENTICATED:
-		return "not authenticated";
-
-	case AUTHENTICATION_STATUS_ENUM::AUTHENTICATING:
-		return "authenticating...";
-
-	case AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR:
-		return "authenticated as administrator";
-
-	case AUTHENTICATION_STATUS_ENUM::USER:
-		return "authenticated as user";
-
-	case AUTHENTICATION_STATUS_ENUM::GUEST:
-		return "authenticated as guest";
-
-	default:
-		return "UNKNOWN";
-	}
 }
 
 
@@ -134,39 +52,34 @@ int JniorJmp::Connect()
 	// if we return INVALID_SOCKET then something went wrong.  call cleanup 
 	// and raise the Error callback method
 	if (m_sckt == INVALID_SOCKET) {
-		WSACleanup();
+		cleanup_sockets();
 	}
-
-	this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTING);
 
 	// everything looks good, continue to connect
 	sck_add.sin_family = AF_INET;
 	sck_add.sin_addr.s_addr = inet_addr(this->m_ipAddress);
 	sck_add.sin_port = htons(9220);
-	int connectResult = connect(this->m_sckt, (sockaddr*)&sck_add, sizeof(sockaddr_in));
+
+	// try to connect
+	int connectResult = connect(this->m_sckt, (sockaddr *)&sck_add, sizeof(sockaddr_in));
 
 	if (0 == connectResult) {
 		// we were successfully connected.  start a receiver thread
-		HANDLE m_hThread = CreateThread(
-			NULL,										// default security attributes 
-			0,											// use default stack size  
-			(LPTHREAD_START_ROUTINE)receiverThread,  	// thread function 
-			(LPVOID*)this,       						// argument to thread function 
-			0,											// use default creation flags 
-			&this->m_dwThreadId);						// returns the thread identifier 
 
-		_loginFailureCount = 0;
+		std::thread t(receiverThread, (void*)this);
 
-		this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTED);
+		//unsigned long m_dwThreadId;
+		//HANDLE m_hThread = CreateThread(
+		//	NULL,										// default security attributes 
+		//	0,											// use default stack size  
+		//	(LPTHREAD_START_ROUTINE)receiverThread,  	// thread function 
+		//	(LPVOID*)this,       						// argument to thread function 
+		//	0,											// use default creation flags 
+		//	&m_dwThreadId);								// returns the thread identifier 
 
 		// we were successfully connected.  send an empty message so that we get an 
 		//  unauthenticated response with a Nonce to use in our login message
 		this->Send(JmpMessage().dump().c_str());
-
-	}
-	else {
-		this->_connectionStatus.setStatus(CONNECTION_STATUS_ENUM::CONNECTION_FAILED);
-
 	}
 
 	// we cant return until the connection has been negotiated
@@ -186,6 +99,7 @@ void JniorJmp::MessageReceived(json json_obj) {
 	this->logfile->log(this->m_ipAddress + std::string(" >>> ") + json_obj.dump());
 
 	std::string message = json_obj["Message"];
+	std::cout << message << std::endl;
 
 	// is there a Meta object with a Hash value?
 	std::string hash;
@@ -194,34 +108,13 @@ void JniorJmp::MessageReceived(json json_obj) {
 	}
 
 	if (message == "Error") {
-
-		this->_nonce = json_obj["Nonce"];
-		if (0 == this->_loginFailureCount++) {
-			this->SendLogin("jnior", "jnior", this->_nonce);
-			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::AUTHENTICATING);
-		}
-		else {
-			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::AUTHENTICATION_FAILED);
-		}
+		std::string nonce = json_obj["Nonce"];
+		this->SendLogin("jnior", "jnior", nonce);
 
 	}
 	else if ("Authenticated" == message) {
 		this->dataReady = true;
 		this->responseJson = json_obj;
-
-		_loggedIn = true;
-
-		if (json_obj["Administrator"]) {
-			this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR);
-		}
-		else {
-			if (json_obj["Control"]) {
-				this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::USER);
-			}
-			else {
-				this->setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM::GUEST);
-			}
-		}
 
 		std::unique_lock<std::mutex> lock(mtx);
 		lock.unlock();
@@ -233,16 +126,10 @@ void JniorJmp::MessageReceived(json json_obj) {
 		this->inputsJson = json_obj["Inputs"];
 		this->outputsJson = json_obj["Outputs"];
 
-		// if we have an monitor callback then call it.  the user will have to call the 
-		//  appropriate IO methods to get the status of the IO.
-		if (nullptr != this->MonitorCallback) {
-			this->MonitorCallback(this->m_uuid);
-		}
-
 	}
 
-	// check to see if a hash was found.  if it was then alert our conditional lock that is 
-	//  waiting on the response
+	// check to see if a hash was found.  if it was then alert our conditional 
+	//  lock that is waiting on the response
 	if (!hash.empty()) {
 		this->dataReady = true;
 		this->responseJson = json_obj;
@@ -271,19 +158,10 @@ void JniorJmp::SendLogin(std::string username, std::string password, std::string
 	void* md5 = hashing::md5::hash(ss.str());
 	const char* authDigest = hashing::md5::sig2hex(md5).c_str();
 
-	char* loginMessage = new char[64];
+	char loginMessage[64];
 	sprintf(loginMessage, "{\"Auth-Digest\": \"%s:%s\"}", username.c_str(), hashing::md5::sig2hex(md5).c_str());
 
 	this->Send((char*)loginMessage);
-
-	delete loginMessage;
-	delete md5;
-}
-
-
-
-bool JniorJmp::IsLoggedIn() {
-	return this->_loggedIn;
 }
 
 
@@ -414,124 +292,4 @@ int JniorJmp::Send(const char* jsonMessage) {
 
 char* JniorJmp::getUUID() {
 	return this->m_uuid;
-}
-
-
-
-#include <cstring> // For strerror
-#include <cerrno>  // For errno
-
-
-
-static DWORD WINAPI receiverThread(LPVOID *lparam)
-{
-	JniorJmp* jniorJmp = (JniorJmp *)lparam;
-	//SOCKET sckt = (SOCKET)lparam;
-	SOCKET socket = jniorJmp->getSocket();
-
-	jniorJmp->logfile->log("listener started");
-
-	DWORD dwRecvTimeout = 2 * 60000; // 5 minutes
-	int rc = setsockopt(socket,
-		SOL_SOCKET, SO_RCVTIMEO,
-		(const char*)&dwRecvTimeout, sizeof(dwRecvTimeout));
-
-	try {
-		while (!jniorJmp->b_quit) {
-
-			char buffer[1024];
-
-			// look for [
-			while (true) {
-				// read a byte and break if one was read
-				int i = recv(socket, buffer, 1, 0);
-				if (1 == i) break;
-
-				// ZERO is peer initiated GRACEFUL close
-				if (0 == i) {
-					throw std::runtime_error("graceful close");
-				}
-
-				// less than ZERO means there was a socket error and we need to 
-				//  figure out what it was.  it could be an error or it could be 
-				//  a timeout that we use to initiate a keep-alive
-				if (0 > i) {
-					if (-1 == i) {
-						jniorJmp->Send(JmpMessage().dump().c_str());
-					}
-					else {
-						int i = WSAGetLastError();
-						throw std::runtime_error(std::string("Socket error: ") + strerror(errno) + strerror(i));
-					}
-				}
-			}
-
-			while ('[' != buffer[0]) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// skip whitespace
-			while (isspace(buffer[0])) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// read and build a length string from the ascii digits
-			int len = 0;
-			recv(socket, buffer, 1, 0);
-			do {
-				// n is the numeric value if the ascii digit
-				int n = buffer[0] - '0';
-				len = len * 10 + n;
-				recv(socket, buffer, 1, 0);
-			} while (isdigit(buffer[0]));
-
-			// skip whitespace
-			while (isspace(buffer[0])) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// read until , found
-			while (',' != buffer[0]) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// skip whitespace
-			while (isspace(buffer[0])) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// read the number of bytes we received from the length.  then copy 
-			//  only the new data to a new array and null terminate it.
-			int bytesRead = recv(socket, buffer, len, 0);
-			char* jsonString = new char[bytesRead + 1];
-			jsonString[bytesRead] = 0x0;
-			strncpy(jsonString, buffer, bytesRead);
-
-			// skip whitespace
-			while (isspace(buffer[0])) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			// get the ending right square bracket
-			while (']' != buffer[0]) {
-				recv(socket, buffer, 1, 0);
-			}
-
-			json json_obj = json::parse(jsonString);
-			jniorJmp->MessageReceived(json_obj);
-
-			delete jsonString;
-		}
-	}
-	catch (const std::runtime_error& e) {
-		jniorJmp->logfile->error("error: " + std::string(e.what()));
-	}
-
-	// set the connection status to CLOSED
-	jniorJmp->GetConnectionStatus().setStatus(CONNECTION_STATUS_ENUM::CONNECTION_LOST);
-
-	jniorJmp->logfile->log("listener done.");
-
-	return 0;
-
 }

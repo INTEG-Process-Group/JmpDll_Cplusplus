@@ -98,7 +98,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\Debug\* ..\TestApp\bin\Debug</Command>
+      <Command>copy ..\Debug\* ..\Tests\DotNetTestApp\bin\Debug</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

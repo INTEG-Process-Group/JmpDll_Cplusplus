@@ -2,6 +2,8 @@
 
 #include <condition_variable>
 #include <mutex>
+#include <thread>
+
 
 #include "Json.h"
 using json = nlohmann::json;
@@ -9,6 +11,7 @@ using json = nlohmann::json;
 #include "logger.hpp"
 
 #include "jmpdll.h"
+#include "jmp_message.hpp"
 
 #include "connection_status.hpp"
 
@@ -62,9 +65,17 @@ public:
 	JniorJmp(const char* ipAddress, int port = 9220);
 	~JniorJmp();
 
-	int SetConnectionCallback(CallbackFunction callback);
-	int SetAuthenticationCallback(CallbackFunction callback);
-	int SetMonitorCallback(CallbackFunction callback);
+	void SetConnectionCallback(CallbackFunction callback) {
+		ConnectionCallback = callback;
+	}
+
+	void SetAuthenticationCallback(CallbackFunction callback) {
+		AuthenticationCallback = callback;
+	}
+
+	void SetMonitorCallback(CallbackFunction callback) {
+		MonitorCallback = callback;
+	}
 
 	char* getUUID();
 
@@ -74,11 +85,15 @@ public:
 	void MessageReceived(json json_obj);
 
 	/**
-	 * @brief		Sends the given credentials with the nonce that was received from the 
+	 * @brief		Sends the given credentials with the nonce that was received from the
 	 *				authentication fialed message.
 	 */
 	int SendLogin(std::string username, std::string password);
-	bool IsLoggedIn();
+	bool IsLoggedIn() {
+		return _authenticationStatus == AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR
+			|| _authenticationStatus == AUTHENTICATION_STATUS_ENUM::USER
+			|| _authenticationStatus == AUTHENTICATION_STATUS_ENUM::GUEST;
+	}
 
 	int GetInputs();
 	int GetInput(int channelNumber);
@@ -96,8 +111,8 @@ public:
 	/**
 	 * @brief		Reads a device
 	 *
-	 *			used to read data from an external module.  this is a generic method that will 
-	 *			just return the device data.  it is up to the calling method to decide if the 
+	 *			used to read data from an external module.  this is a generic method that will
+	 *			just return the device data.  it is up to the calling method to decide if the
 	 *			data is valid and to interpret the data.
 	 *
 	 * @param		deviceId		The ID of the device we should read
@@ -136,8 +151,31 @@ public:
 	//}
 
 
-	int GetAuthenticationStatus();
-	std::string GetAuthenticationStatusDescription();
+	int GetAuthenticationStatus() {
+		return this->_authenticationStatus;
+	}
+
+	std::string GetAuthenticationStatusDescription() {
+		switch (this->_authenticationStatus) {
+		case AUTHENTICATION_STATUS_ENUM::NOT_AUTHENTICATED:
+			return "not authenticated";
+
+		case AUTHENTICATION_STATUS_ENUM::AUTHENTICATING:
+			return "authenticating...";
+
+		case AUTHENTICATION_STATUS_ENUM::ADMINISTRATOR:
+			return "authenticated as administrator";
+
+		case AUTHENTICATION_STATUS_ENUM::USER:
+			return "authenticated as user";
+
+		case AUTHENTICATION_STATUS_ENUM::GUEST:
+			return "authenticated as guest";
+
+		default:
+			return "UNKNOWN";
+		}
+	}
 
 	void setAuthenticationStatus(AUTHENTICATION_STATUS_ENUM authenticationStatus) {
 
@@ -154,3 +192,120 @@ private:
 
 };
 
+
+
+#include <cstring> // For strerror
+#include <cerrno>  // For errno
+
+
+
+static void receiverThread(void* lparam)
+{
+	JniorJmp* jniorJmp = (JniorJmp *)lparam;
+	//SOCKET sckt = (SOCKET)lparam;
+	SOCKET socket = jniorJmp->getSocket();
+
+	jniorJmp->logfile->log("listener started");
+
+	DWORD dwRecvTimeout = 2 * 60000; // 5 minutes
+	int rc = setsockopt(socket,
+		SOL_SOCKET, SO_RCVTIMEO,
+		(const char*)&dwRecvTimeout, sizeof(dwRecvTimeout));
+
+	try {
+		while (!jniorJmp->b_quit) {
+
+			char buffer[1024];
+
+			// look for [
+			while (true) {
+				// read a byte and break if one was read
+				int i = recv(socket, buffer, 1, 0);
+				if (1 == i) break;
+
+				// ZERO is peer initiated GRACEFUL close
+				if (0 == i) {
+					throw std::runtime_error("graceful close");
+				}
+
+				// less than ZERO means there was a socket error and we need to 
+				//  figure out what it was.  it could be an error or it could be 
+				//  a timeout that we use to initiate a keep-alive
+				if (0 > i) {
+					if (-1 == i) {
+						jniorJmp->Send(JmpMessage().dump().c_str());
+					}
+					else {
+						int i = -1;  // WSAGetLastError();
+						throw std::runtime_error(std::string("Socket error: ") + strerror(errno) + strerror(i));
+					}
+				}
+			}
+
+			while ('[' != buffer[0]) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// skip whitespace
+			while (isspace(buffer[0])) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// read and build a length string from the ascii digits
+			int len = 0;
+			recv(socket, buffer, 1, 0);
+			do {
+				// n is the numeric value if the ascii digit
+				int n = buffer[0] - '0';
+				len = len * 10 + n;
+				recv(socket, buffer, 1, 0);
+			} while (isdigit(buffer[0]));
+
+			// skip whitespace
+			while (isspace(buffer[0])) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// read until , found
+			while (',' != buffer[0]) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// skip whitespace
+			while (isspace(buffer[0])) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// read the number of bytes we received from the length.  then copy 
+			//  only the new data to a new array and null terminate it.
+			int bytesRead = recv(socket, buffer, len, 0);
+			char* jsonString = new char[bytesRead + 1];
+			jsonString[bytesRead] = 0x0;
+			strncpy(jsonString, buffer, bytesRead);
+
+			// skip whitespace
+			while (isspace(buffer[0])) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			// get the ending right square bracket
+			while (']' != buffer[0]) {
+				recv(socket, buffer, 1, 0);
+			}
+
+			json json_obj = json::parse(jsonString);
+			jniorJmp->MessageReceived(json_obj);
+
+			delete jsonString;
+		}
+	}
+	catch (const std::runtime_error& e) {
+		jniorJmp->logfile->error("error: " + std::string(e.what()));
+	}
+
+	close_socket(jniorJmp->getSocket());
+	jniorJmp->logfile->log("listener done.");
+
+	return;
+
+}
